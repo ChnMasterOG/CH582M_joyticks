@@ -1,0 +1,39 @@
+{
+    "device": {
+        "usb": 1.1,
+        "class": "0x00",
+        "subclass": "0x00",
+        "protocol": "0x00",
+        "ep0size": 64,
+        "pid": "0xffff",
+        "vid": "0xffff",
+        "version": 1
+    },
+    "config": [
+        {
+            "string": 0,
+            "selfpower": false,
+            "remotewakeup": true,
+            "power": 500,
+            "group": [
+                "E:\\Project\\tp78_joyticks\\CherryUSB\\usb_joytick_hid.chry",
+                "E:\\Project\\tp78_joyticks\\CherryUSB\\usb_raw_hid.chry",
+                "E:\\Project\\tp78_joyticks\\CherryUSB\\usb_cdc.chry"
+            ]
+        }
+    ],
+    "string": [
+        {
+            "name": "manufacturer",
+            "value": "CL_novel"
+        },
+        {
+            "name": "product",
+            "value": "TP78"
+        },
+        {
+            "name": "serial number",
+            "value": "Joyticks"
+        }
+    ]
+}
