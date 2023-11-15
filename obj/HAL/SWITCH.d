@@ -1,4 +1,4 @@
-Profile/hiddev.o: ../Profile/hiddev.c \
+HAL/SWITCH.o: ../HAL/SWITCH.c \
  E:\Project\CH582M_joyticks\HAL\include/HAL.h \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH58x_common.h \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH583SFR.h \
@@ -32,11 +32,7 @@ Profile/hiddev.o: ../Profile/hiddev.c \
  E:\Project\CH582M_joyticks\HAL\include/WS2812.h \
  E:\Project\CH582M_joyticks\HAL\include/USB.h \
  E:\Project\CH582M_joyticks\HAL\include/ICM20602.h \
- E:\Project\CH582M_joyticks\HAL\include/HW_I2C.h \
- E:\Project\CH582M_joyticks\Profile\include/battservice.h \
- E:\Project\CH582M_joyticks\Profile\include/scanparamservice.h \
- E:\Project\CH582M_joyticks\Profile\include/devinfoservice.h \
- E:\Project\CH582M_joyticks\Profile\include/hiddev.h
+ E:\Project\CH582M_joyticks\HAL\include/HW_I2C.h
 
 E:\Project\CH582M_joyticks\HAL\include/HAL.h:
 
@@ -105,11 +101,3 @@ E:\Project\CH582M_joyticks\HAL\include/USB.h:
 E:\Project\CH582M_joyticks\HAL\include/ICM20602.h:
 
 E:\Project\CH582M_joyticks\HAL\include/HW_I2C.h:
-
-E:\Project\CH582M_joyticks\Profile\include/battservice.h:
-
-E:\Project\CH582M_joyticks\Profile\include/scanparamservice.h:
-
-E:\Project\CH582M_joyticks\Profile\include/devinfoservice.h:
-
-E:\Project\CH582M_joyticks\Profile\include/hiddev.h:

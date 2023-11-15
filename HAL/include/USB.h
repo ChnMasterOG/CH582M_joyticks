@@ -27,15 +27,17 @@
     #define Volume_Pause    (1 << 6)
     #define Volume_Stop     (1 << 7)
 
-    #define START_USB_EVENT       0x0001
-    #define USB_CONNECT_EVENT     0x0010
-    #define USB_TEST_EVENT        0x1000
+    #define START_USB_EVENT             0x0001
+    #define USB_CONNECT_EVENT           0x0010
+    #define USB_SEND_JOY_REPORT_EVENT   0x0020
+    #define USB_TEST_EVENT              0x1000
 
-    #define USB_ERR_LENGTH        0x01
-    #define USB_DAT_INVALID       0x02
-    #define USB_ERR_UNKNOWN       0x10
+    #define USB_ERR_LENGTH              0x01
+    #define USB_DAT_INVALID             0x02
+    #define USB_ERR_UNKNOWN             0x10
 
     extern tmosTaskID usbTaskID;
+    extern uint8_t joy_hid_buffer[6];
 
     void usb_printf(char *pFormat, ...);
     void HAL_USBInit( void );

@@ -81,55 +81,10 @@
 #define WAKE_UP_RTC_MAX_TIME        45
 #endif
 #ifndef HAL_KEY
-#define HAL_KEY                     FALSE           // 板载按键
+#define HAL_KEY                     TRUE            // 板载按键
 #endif
 #ifndef HAL_LED
 #define HAL_LED                     FALSE           // 板载LED
-#endif
-#ifndef HAL_WDG
-#define HAL_WDG                     TRUE            // 看门狗
-#endif
-#ifndef HAL_USB
-#define HAL_USB                     TRUE            // USB
-#endif
-#ifndef TP_Reverse
-#define TP_Reverse                  TRUE            // 小红点是否反转
-#endif
-#ifndef HAL_PS2
-#define HAL_PS2                     FALSE           // PS/2小红点
-#endif
-#ifndef HAL_KEYBOARD
-#define HAL_KEYBOARD                TRUE            // 键盘
-#endif
-#ifndef HAL_OLED
-#define HAL_OLED                    TRUE            // OLED
-#endif
-#ifndef HAL_BATTADC
-#define HAL_BATTADC                 TRUE            // 电池ADC
-#endif
-#ifndef HAL_WS2812_PWM
-#define HAL_WS2812_PWM              TRUE            // WS2812 PWM驱动
-#endif
-#ifndef HAL_MOTOR
-#define HAL_MOTOR                   TRUE            // 震动马达
-#endif
-#ifndef HAL_RF
-#define HAL_RF                      TRUE            // RF 2.4G
-#endif
-#ifndef HAL_HW_I2C
-#define HAL_HW_I2C                  TRUE            // 硬件I2C
-#endif
-#ifndef SW_PAINTEDEGG
-#define SW_PAINTEDEGG               TRUE            // 彩蛋
-#endif
-#ifndef HAL_I2C_TP
-#define HAL_I2C_TP                  TRUE            // I2C小红点
-#endif
-#ifndef HAL_MPR121_CAPMOUSE
-#define HAL_MPR121_CAPMOUSE         FALSE           // MPR121触摸板 - 注意：修改此处还需同步库文件修改
-#endif
-#ifndef HAL_MPR121_TOUCHBAR
-#define HAL_MPR121_TOUCHBAR         TRUE            // MPR121触摸条 - 注意：修改此处还需同步库文件修改
 #endif
 #ifndef HAL_MODULE
 #define HAL_MODULE                  FALSE           // 扩展模块demo
@@ -143,15 +98,12 @@
 #ifndef BLE_CALIBRATION_PERIOD
 #define BLE_CALIBRATION_PERIOD      120000          // BLE校准周期(ms)
 #endif
-//#ifndef BLE_SNV
-//#define BLE_SNV                     TRUE
-//#endif
-//#ifndef BLE_SNV_NUM
-//#define BLE_SNV_NUM                 1
-//#endif
-//#ifndef BLE_SNV_ADDR
-//#define BLE_SNV_ADDR                0x6F000         // (0x77E00-FLASH_ROM_MAX_SIZE)
-//#endif
+#ifndef BLE_SNV
+#define BLE_SNV                     TRUE
+#endif
+#ifndef BLE_SNV_ADDR
+#define BLE_SNV_ADDR                (0x77E00-FLASH_ROM_MAX_SIZE)
+#endif
 #ifndef CLK_OSC32K
 #define CLK_OSC32K                  2               // 该项请勿在此修改，必须在工程配置里的预处理中修改，如包含主机角色必须使用外部32K
 #endif
@@ -178,6 +130,22 @@
 #endif
 #ifndef CENTRAL_MAX_CONNECTION
 #define CENTRAL_MAX_CONNECTION      3
+#endif
+
+#ifndef BATTERY_THREAD_PREIOD
+#define BATTERY_THREAD_PREIOD       5000
+#endif
+#ifndef WS2812_THREAD_PREIOD
+#define WS2812_THREAD_PREIOD        60
+#endif
+#ifndef SWITCH_THREAD_PREIOD
+#define SWITCH_THREAD_PREIOD        10
+#endif
+#ifndef ICM_THREAD_PREIOD
+#define ICM_THREAD_PREIOD           10
+#endif
+#ifndef KEY_THREAD_PREIOD
+#define KEY_THREAD_PREIOD           20
 #endif
 
 #ifdef HAL_OLED

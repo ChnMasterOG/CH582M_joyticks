@@ -6,39 +6,45 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../HAL/BATTERY.c \
+../HAL/BLE.c \
 ../HAL/CORE.c \
 ../HAL/HW_I2C.c \
 ../HAL/ICM20602.c \
+../HAL/KEY.c \
 ../HAL/MCU.c \
 ../HAL/RTC.c \
 ../HAL/SLEEP.c \
+../HAL/SWITCH.c \
 ../HAL/USB.c \
-../HAL/WS2812.c \
-../HAL/hidmouse.c 
+../HAL/WS2812.c 
 
 OBJS += \
 ./HAL/BATTERY.o \
+./HAL/BLE.o \
 ./HAL/CORE.o \
 ./HAL/HW_I2C.o \
 ./HAL/ICM20602.o \
+./HAL/KEY.o \
 ./HAL/MCU.o \
 ./HAL/RTC.o \
 ./HAL/SLEEP.o \
+./HAL/SWITCH.o \
 ./HAL/USB.o \
-./HAL/WS2812.o \
-./HAL/hidmouse.o 
+./HAL/WS2812.o 
 
 C_DEPS += \
 ./HAL/BATTERY.d \
+./HAL/BLE.d \
 ./HAL/CORE.d \
 ./HAL/HW_I2C.d \
 ./HAL/ICM20602.d \
+./HAL/KEY.d \
 ./HAL/MCU.d \
 ./HAL/RTC.d \
 ./HAL/SLEEP.d \
+./HAL/SWITCH.d \
 ./HAL/USB.d \
-./HAL/WS2812.d \
-./HAL/hidmouse.d 
+./HAL/WS2812.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

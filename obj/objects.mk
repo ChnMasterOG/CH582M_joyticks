@@ -5,5 +5,5 @@
 
 USER_OBJS :=
 
-LIBS := -lISP583 -lCH58xBLE
+LIBS := -lISP583 -lCH58xBLE -lm
 

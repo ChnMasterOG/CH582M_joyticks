@@ -24,6 +24,8 @@ HAL/MCU.o: ../HAL/MCU.c E:\Project\CH582M_joyticks\HAL\include/HAL.h \
  E:\Project\CH582M_joyticks\HAL\include/KEY.h \
  E:\Project\CH582M_joyticks\HAL\include/BLE.h \
  E:\Project\CH582M_joyticks\HAL\include/CONFIG.h \
+ E:\Project\CH582M_joyticks\HAL\include/SWITCH.h \
+ E:\Project\CH582M_joyticks\HAL\include/HAL.h \
  E:\Project\CH582M_joyticks\HAL\include/CORE.h \
  E:\Project\CH582M_joyticks\HAL\include/BATTERY.h \
  E:\Project\CH582M_joyticks\HAL\include/WS2812.h \
@@ -82,6 +84,10 @@ E:\Project\CH582M_joyticks\HAL\include/KEY.h:
 E:\Project\CH582M_joyticks\HAL\include/BLE.h:
 
 E:\Project\CH582M_joyticks\HAL\include/CONFIG.h:
+
+E:\Project\CH582M_joyticks\HAL\include/SWITCH.h:
+
+E:\Project\CH582M_joyticks\HAL\include/HAL.h:
 
 E:\Project\CH582M_joyticks\HAL\include/CORE.h:
 

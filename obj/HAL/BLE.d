@@ -1,5 +1,4 @@
-Profile/hiddev.o: ../Profile/hiddev.c \
- E:\Project\CH582M_joyticks\HAL\include/HAL.h \
+HAL/BLE.o: ../HAL/BLE.c E:\Project\CH582M_joyticks\HAL\include/HAL.h \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH58x_common.h \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH583SFR.h \
  E:\Project\CH582M_joyticks\RVMSIS/core_riscv.h \
@@ -34,9 +33,10 @@ Profile/hiddev.o: ../Profile/hiddev.c \
  E:\Project\CH582M_joyticks\HAL\include/ICM20602.h \
  E:\Project\CH582M_joyticks\HAL\include/HW_I2C.h \
  E:\Project\CH582M_joyticks\Profile\include/battservice.h \
- E:\Project\CH582M_joyticks\Profile\include/scanparamservice.h \
  E:\Project\CH582M_joyticks\Profile\include/devinfoservice.h \
- E:\Project\CH582M_joyticks\Profile\include/hiddev.h
+ E:\Project\CH582M_joyticks\Profile\include/hiddev.h \
+ E:\Project\CH582M_joyticks\Profile\include/hidjoytickservice.h \
+ E:\Project\CH582M_joyticks\HAL\include/CONFIG.h
 
 E:\Project\CH582M_joyticks\HAL\include/HAL.h:
 
@@ -108,8 +108,10 @@ E:\Project\CH582M_joyticks\HAL\include/HW_I2C.h:
 
 E:\Project\CH582M_joyticks\Profile\include/battservice.h:
 
-E:\Project\CH582M_joyticks\Profile\include/scanparamservice.h:
-
 E:\Project\CH582M_joyticks\Profile\include/devinfoservice.h:
 
 E:\Project\CH582M_joyticks\Profile\include/hiddev.h:
+
+E:\Project\CH582M_joyticks\Profile\include/hidjoytickservice.h:
+
+E:\Project\CH582M_joyticks\HAL\include/CONFIG.h:

@@ -28,9 +28,10 @@
 
   #define BAT_FLOATING_VAL    50    // ADC浮动超过该值则警告
 
-  #define BAT_ADC_PIN         GPIO_Pin_8    // GPIOA
-  #define BAT_CHRG_PIN        GPIO_Pin_16   // GPIOB
-  #define BAT_COM_PIN         GPIO_Pin_17   // GPIOB
+  #define BAT_ADC_PIN         GPIO_Pin_4    // GPIOA
+  #define BAT_CHRG_PIN        GPIO_Pin_9    // GPIOB
+  #define BAT_STDBY_PIN       GPIO_Pin_8    // GPIOB
+  #define BAT_COM_PIN         GPIO_Pin_11   // GPIOA
   #define BAT_IS_CHARGING     (GPIOB_ReadPortPin(BAT_CHRG_PIN) == 0)
   #define BAT_ADC_ENA()       GPIOB_SetBits(BAT_COM_PIN)
   #define BAT_ADC_DIS()       GPIOB_ResetBits(BAT_COM_PIN)
@@ -39,7 +40,6 @@
   void BATTERY_DMA_ENABLE( void );
   void BATTERY_ADC_Convert( void );
   void BATTERY_ADC_Calculation( void );
-  void BATTERY_DrawBMP( void );
 
   extern UINT16 BAT_abcBuff[ADC_MAXBUFLEN];
   extern UINT32 BAT_adcVal;

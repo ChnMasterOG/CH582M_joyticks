@@ -182,6 +182,7 @@ void CH58X_BLEInit(void)
 tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 {
     uint8_t *msgPtr;
+    uint8_t i;
 
     if (events & SYS_EVENT_MSG)
     { // 处理HAL层消息，调用tmos_msg_receive读取消息，处理完成后删除消息。
@@ -197,21 +198,53 @@ tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
     if (events & HAL_REG_INIT_EVENT)
     {
 #if(defined BLE_CALIBRATION_ENABLE) && (BLE_CALIBRATION_ENABLE == TRUE) // 校准任务，单次校准耗时小于10ms
-    BLE_RegInit();  // 校准RF
+        BLE_RegInit();  // 校准RF
 #if(defined CLK_OSC32K && CLK_OSC32K != 0x80)
-    Lib_Calibration_LSI(); // 校准内部RC
+        Lib_Calibration_LSI(); // 校准内部RC
 #endif
-    tmos_start_task(halTaskID, HAL_REG_INIT_EVENT, MS1_TO_SYSTEM_TIME(BLE_CALIBRATION_PERIOD));
-    return events ^ HAL_REG_INIT_EVENT;
+        tmos_start_task(halTaskID, HAL_REG_INIT_EVENT, MS1_TO_SYSTEM_TIME(BLE_CALIBRATION_PERIOD));
+        return events ^ HAL_REG_INIT_EVENT;
+#endif
+    }
+
+    if (events & HAL_KEY_EVENT)
+    {
+#if (defined HAL_KEY) && (HAL_KEY == TRUE)
+        HAL_KeyPoll(); /* Check for keys */
+        tmos_start_task(halTaskID, HAL_KEY_EVENT, MS1_TO_SYSTEM_TIME(KEY_THREAD_PREIOD));
+        return events ^ HAL_KEY_EVENT;
 #endif
     }
 
     if (events & ICM_EVENT)
     {
-//        extern void ICM_test(void);
-//        ICM_test();
-        tmos_start_task(halTaskID, ICM_EVENT, MS1_TO_SYSTEM_TIME(1000));
+        ICM20602_data_update();
+//        usb_printf("pitch: %d, roll: %d\r\n", (int)(eulerAngle.pitch * 1000), (int)(eulerAngle.roll * 1000));
+        tmos_start_task(halTaskID, ICM_EVENT, MS1_TO_SYSTEM_TIME(ICM_THREAD_PREIOD));
         return events ^ ICM_EVENT;
+    }
+
+    if (events & SWITCH_EVENT)
+    {
+        for (i = 0; i < 4; i++)
+            SWITCH_ADC_ENABLE(i);
+        tmos_start_task(halTaskID, SWITCH_EVENT, MS1_TO_SYSTEM_TIME(SWITCH_THREAD_PREIOD));
+        return events ^ SWITCH_EVENT;
+    }
+
+    if (events & WS2812_EVENT)
+    {
+        WS2812_Send();
+        tmos_start_task(halTaskID, WS2812_EVENT, MS1_TO_SYSTEM_TIME(WS2812_THREAD_PREIOD));
+        return events ^ WS2812_EVENT;
+    }
+
+    if (events & BATTERY_EVENT)
+    {
+        BATTERY_DMA_ENABLE();
+        BATTERY_ADC_Calculation();
+        tmos_start_task(halTaskID, BATTERY_EVENT, MS1_TO_SYSTEM_TIME(BATTERY_THREAD_PREIOD));
+        return events ^ BATTERY_EVENT;
     }
 
     return 0;
@@ -235,10 +268,19 @@ tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 void HAL_Init()
 {
     halTaskID = TMOS_ProcessEventRegister( HAL_ProcessEvent );
+
     HAL_TimeInit();
-    // ICM_init();
+    ICM20602_init();
+    ICM20602_gyro_offset_init();
+    SWITCH_Init();
+    BATTERY_Init();
     HAL_USBInit();
-//    tmos_start_task(halTaskID, ICM_EVENT, MS1_TO_SYSTEM_TIME(1000));
+
+    tmos_start_task(halTaskID, ICM_EVENT, MS1_TO_SYSTEM_TIME(1000));
+    tmos_start_task(halTaskID, WS2812_EVENT, MS1_TO_SYSTEM_TIME(1000));
+#if (defined HAL_KEY) && (HAL_KEY == TRUE)
+    tmos_start_task(halTaskID, HAL_KEY_EVENT, MS1_TO_SYSTEM_TIME(1000));
+#endif
 #if(defined BLE_CALIBRATION_ENABLE) && (BLE_CALIBRATION_ENABLE == TRUE)
     tmos_start_task(halTaskID, HAL_REG_INIT_EVENT, MS1_TO_SYSTEM_TIME(BLE_CALIBRATION_PERIOD)); // 添加校准任务，单次校准耗时小于10ms
 #endif

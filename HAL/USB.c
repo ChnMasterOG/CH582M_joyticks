@@ -395,6 +395,7 @@ const unsigned char usbd_hid_report_raw_descriptor[HID_REPORT_RAW_DESC_SIZE] = {
         0xC0
 };
 
+#if 0
 /*!< USBD HID REPORT Descriptor - GamePad */
 const unsigned char usbd_hid_report_gamepad_descriptor_backup[52] = {
         0x05, 0x01, // USAGE_PAGE (Generic Desktop)
@@ -429,6 +430,7 @@ const unsigned char usbd_hid_report_gamepad_descriptor_backup[52] = {
         0x81, 0x43, // INPUT (Cnst, Var, Abs, Null)
         0xC0,
 };
+#endif
 
 /*!< USBD HID REPORT Descriptor - GamePad */
 const unsigned char usbd_hid_report_gamepad_descriptor[HID_REPORT_GAMEPAD_DESC_SIZE] = {
@@ -442,21 +444,21 @@ const unsigned char usbd_hid_report_gamepad_descriptor[HID_REPORT_GAMEPAD_DESC_S
         0x09, 0x31, // USAGE (Y)
         0x15, 0xFF, // LOGICAL_MINIMUM (-1)
         0x25, 0x01, // LOGICAL_MAXIMUM (1)
-        0x95, 0x02, // REPORT_COUNT (2) - count 2
+        0x95, 0x04, // REPORT_COUNT (4) - count 4
         0x75, 0x08, // REPORT_SIZE (8) - 8 bit
         0x81, 0x02, // INPUT (Data, Var, Abs)
         0xC0,
 
         0x05, 0x09, // USAGE_PAGE (Button)
         0x19, 0x01, // USAGE_MINIMUM (number 1)
-        0x29, 0x06, // USAGE_MAXIMUM (number 6)
-        0x15, 0x00, // USAGE_MINIMUM (value 0)
-        0x25, 0x01, // USAGE_MAXIMUM (value 1)
-        0x95, 0x06, // REPORT_COUNT (6) - count 6
+        0x29, 0x0A, // USAGE_MAXIMUM (number 10)
+        0x15, 0x00, // LOGICAL_MINIMUM (value 0)
+        0x25, 0x01, // LOGICAL_MAXIMUM (value 1)
+        0x95, 0x0A, // REPORT_COUNT (10) - count 10
         0x75, 0x01, // REPORT_SIZE (1) - 1 bit
         0x81, 0x42, // INPUT (Data, Var, Abs)
 
-        0x95, 0x02, // REPORT_COUNT (2) - 填充8bit
+        0x95, 0x06, // REPORT_COUNT (6) - 填充8bit
         0x81, 0x43, // INPUT (Cnst, Var, Abs, Null)
         0xC0,
 };
@@ -484,6 +486,7 @@ static void usbd_hid_gamepad_out_callback(uint8_t ep, uint32_t nbytes)
 
 USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t raw_buffer[32] = { 0 };
 USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t cdc_buffer[0x40];
+USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t joy_hid_buffer[6] = { 0 };
 
 static void usbd_hid_raw_in_callback(uint8_t ep, uint32_t nbytes)
 {
@@ -510,7 +513,7 @@ static void usbd_cdc_acm_bulk_in_callback(uint8_t ep, uint32_t nbytes)
 
 static void usbd_cdc_acm_bulk_out_callback(uint8_t ep, uint32_t nbytes)
 {
-    uint8_t send_buf[3] = {0};
+    uint8_t send_buf[6] = {0};
     /* for debug */
     if (cdc_buffer[0] == 'a') {
         if (cdc_buffer[2] == 'l') {
@@ -525,8 +528,9 @@ static void usbd_cdc_acm_bulk_out_callback(uint8_t ep, uint32_t nbytes)
             }
         }
     } else if (cdc_buffer[0] == 'b') {
-        if (cdc_buffer[2] >= '0' && cdc_buffer[2] <= '5') {
-            send_buf[2] = 1 << (cdc_buffer[2] - '0');
+        if (cdc_buffer[2] >= '0' && cdc_buffer[2] <= '9') {
+            send_buf[4] = 1 << (cdc_buffer[2] - '0');
+            send_buf[5] = 1 << (cdc_buffer[2] - '8');
             usbd_ep_start_write(USBD_IF0_AL0_EP0_ADDR, send_buf, sizeof(send_buf));
         }
     }
@@ -656,39 +660,6 @@ int usbd_msc_sector_write(uint32_t sector, uint8_t *buffer, uint32_t length)
     return 0;
 }
 
-#if 0
-
-void hid_mouse_test(void)
-{
-    HIDMouse[1] = HIDMouse[2] = 5;
-
-    while (hid_state.mouse_hid_state == HID_STATE_BUSY) {}
-    int ret = usbd_ep_start_write(USBD_IF1_AL0_EP0_ADDR, HIDMouse, HID_MOUSE_DATA_LENGTH);
-    if (ret >= 0) {
-        hid_state.mouse_hid_state = HID_STATE_BUSY;
-    }
-}
-
-void hid_keyboard_test(void)
-{
-    HIDKeyboard[2] = HID_KBD_USAGE_A;
-
-    while (hid_state.keyboard_hid_state == HID_STATE_BUSY) {}
-    int ret = usbd_ep_start_write(USBD_IF0_AL0_EP0_ADDR, HIDKeyboard, HID_KEYBOARD_DATA_LENGTH);
-    if (ret >= 0) {
-        hid_state.keyboard_hid_state = HID_STATE_BUSY;
-    }
-
-    while (hid_state.keyboard_hid_state == HID_STATE_BUSY) {}
-    DelayMs(30);
-    HIDKeyboard[2] = 0;
-    ret = usbd_ep_start_write(USBD_IF0_AL0_EP0_ADDR, HIDKeyboard, HID_KEYBOARD_DATA_LENGTH);
-    if (ret >= 0) {
-        hid_state.keyboard_hid_state = HID_STATE_BUSY;
-    }
-}
-#endif
-
 /*******************************************************************************
  * Function Name  : USB_ProcessEvent
  * Description    : USB处理事件
@@ -697,25 +668,31 @@ void hid_keyboard_test(void)
  *******************************************************************************/
 tmosEvents USB_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 {
-  int ret;
+    int ret;
 
-  if ( events & START_USB_EVENT )
-  {
-    PFIC_EnableIRQ( USB_IRQn );
-    return events ^ START_USB_EVENT;
-  }
+    if ( events & START_USB_EVENT )
+    {
+        PFIC_EnableIRQ( USB_IRQn );
+        return events ^ START_USB_EVENT;
+    }
 
-  if ( events & USB_TEST_EVENT )
-  {
+    if ( events & USB_SEND_JOY_REPORT_EVENT )
+    {
+        usbd_ep_start_write(USBD_IF0_AL0_EP0_ADDR, joy_hid_buffer, sizeof(joy_hid_buffer));
+        return events ^ USB_SEND_JOY_REPORT_EVENT;
+    }
+
+    if ( events & USB_TEST_EVENT )
+    {
 #if 0
-    hid_keyboard_test();
-    hid_mouse_test();
+        hid_keyboard_test();
+        hid_mouse_test();
 #endif
-    tmos_start_task(usbTaskID, USB_TEST_EVENT, MS1_TO_SYSTEM_TIME(500));
-    return events ^ USB_TEST_EVENT;
-  }
+        tmos_start_task(usbTaskID, USB_TEST_EVENT, MS1_TO_SYSTEM_TIME(500));
+        return events ^ USB_TEST_EVENT;
+    }
 
-  return 0;
+    return 0;
 }
 
 /*******************************************************************************
@@ -726,24 +703,26 @@ tmosEvents USB_ProcessEvent( tmosTaskID task_id, tmosEvents events )
  *******************************************************************************/
 void HAL_USBInit( void )
 {
-  uint16_t Udisk_mode = 0;
+    uint16_t Udisk_mode = 0;
 
-  usbTaskID = TMOS_ProcessEventRegister( USB_ProcessEvent );
-  /* support to cherry usb */
-  TMR0_TimerInit(FREQ_SYS / 1000);
-  TMR0_ITCfg(ENABLE, TMR0_3_IT_CYC_END);
-  PFIC_EnableIRQ(TMR0_IRQn);
-  PFIC_SetPriority(TMR0_IRQn, 20);
-  /* usb device init */
-  usb_device_init();
-  while (!usb_device_is_configured());
+    usbTaskID = TMOS_ProcessEventRegister( USB_ProcessEvent );
+    /* support to cherry usb */
+#if 0
+    TMR0_TimerInit(FREQ_SYS / 1000);
+    TMR0_ITCfg(ENABLE, TMR0_3_IT_CYC_END);
+    PFIC_EnableIRQ(TMR0_IRQn);
+    PFIC_SetPriority(TMR0_IRQn, 20);
+#endif
+    /* usb device init */
+    usb_device_init();
+    while (!usb_device_is_configured());
 }
 
 void usb_dc_low_level_init(void)
 {
-  extern void USB_IRQHandler(void);
-  PFIC_EnableIRQ(USB_IRQn);
-  PFIC_EnableFastINT0(USB_IRQn, (uint32_t)(void *)USB_IRQHandler);
+    extern void USB_IRQHandler(void);
+    PFIC_EnableIRQ(USB_IRQn);
+    PFIC_EnableFastINT0(USB_IRQn, (uint32_t)(void *)USB_IRQHandler);
 }
 
 void usb_hc_low_level_init(void)
@@ -751,30 +730,32 @@ void usb_hc_low_level_init(void)
 //  PFIC_EnableIRQ(USB2_IRQn);
 }
 
+#if 0
 volatile uint32_t timer_count_user = 0;
 
 __INTERRUPT
 __HIGH_CODE
 void TMR0_IRQHandler(void)
 {
-  /*!< Timer 0 IRQ */
-  if (TMR0_GetITFlag(TMR0_3_IT_CYC_END)) {
-    /*!< Clear Pending flag */
-    TMR0_ClearITFlag(TMR0_3_IT_CYC_END);
+    /*!< Timer 0 IRQ */
+    if (TMR0_GetITFlag(TMR0_3_IT_CYC_END)) {
+        /*!< Clear Pending flag */
+        TMR0_ClearITFlag(TMR0_3_IT_CYC_END);
 
-    /*!< Updata the ms count */
-    timer_count_user++;
-    /*!< Set timing time 1ms */
-    R32_TMR0_CNT_END = GetSysClock() / 1000;
-    R8_TMR0_CTRL_MOD = RB_TMR_ALL_CLEAR;
-    R8_TMR0_CTRL_MOD = RB_TMR_COUNT_EN;
+        /*!< Updata the ms count */
+        timer_count_user++;
+        /*!< Set timing time 1ms */
+        R32_TMR0_CNT_END = GetSysClock() / 1000;
+        R8_TMR0_CTRL_MOD = RB_TMR_ALL_CLEAR;
+        R8_TMR0_CTRL_MOD = RB_TMR_COUNT_EN;
 
-    /*!< Enable interrupt */
-    TMR0_ITCfg(ENABLE, TMR0_3_IT_CYC_END);
-  }
+        /*!< Enable interrupt */
+        TMR0_ITCfg(ENABLE, TMR0_3_IT_CYC_END);
+    }
 }
 
 uint32_t chey_board_millis(void)
 {
-  return timer_count_user;
+    return timer_count_user;
 }
+#endif

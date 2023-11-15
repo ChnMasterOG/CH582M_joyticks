@@ -90,21 +90,21 @@ static const uint8_t hidReportMap[] = {
     0x09, 0x31, // USAGE (Y)
     0x15, 0xFF, // LOGICAL_MINIMUM (-1)
     0x25, 0x01, // LOGICAL_MAXIMUM (1)
-    0x95, 0x02, // REPORT_COUNT (2) - count 2
+    0x95, 0x04, // REPORT_COUNT (4) - count 4
     0x75, 0x08, // REPORT_SIZE (8) - 8 bit
     0x81, 0x02, // INPUT (Data, Var, Abs)
     0xC0,
 
     0x05, 0x09, // USAGE_PAGE (Button)
     0x19, 0x01, // USAGE_MINIMUM (number 1)
-    0x29, 0x06, // USAGE_MAXIMUM (number 6)
-    0x15, 0x00, // USAGE_MINIMUM (value 0)
-    0x25, 0x01, // USAGE_MAXIMUM (value 1)
-    0x95, 0x06, // REPORT_COUNT (6) - count 6
+    0x29, 0x0A, // USAGE_MAXIMUM (number 10)
+    0x15, 0x00, // LOGICAL_MINIMUM (value 0)
+    0x25, 0x01, // LOGICAL_MAXIMUM (value 1)
+    0x95, 0x0A, // REPORT_COUNT (10) - count 10
     0x75, 0x01, // REPORT_SIZE (1) - 1 bit
     0x81, 0x42, // INPUT (Data, Var, Abs)
 
-    0x95, 0x02, // REPORT_COUNT (2) - 野割8bit
+    0x95, 0x06, // REPORT_COUNT (6) - 野割8bit
     0x81, 0x43, // INPUT (Cnst, Var, Abs, Null)
     0xC0,
 };

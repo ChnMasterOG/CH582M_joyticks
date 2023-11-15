@@ -1,5 +1,4 @@
-Profile/hiddev.o: ../Profile/hiddev.c \
- E:\Project\CH582M_joyticks\HAL\include/HAL.h \
+HAL/KEY.o: ../HAL/KEY.c \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH58x_common.h \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH583SFR.h \
  E:\Project\CH582M_joyticks\RVMSIS/core_riscv.h \
@@ -17,6 +16,7 @@ Profile/hiddev.o: ../Profile/hiddev.c \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH58x_usbdev.h \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH58x_usbhost.h \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/ISP583.h \
+ E:\Project\CH582M_joyticks\HAL\include/HAL.h \
  E:\Project\CH582M_joyticks\HAL\include/config.h \
  E:\Project\CH582M_joyticks\LIB/CH58xBLE_LIB.H \
  E:\Project\CH582M_joyticks\HAL\include/RTC.h \
@@ -32,13 +32,7 @@ Profile/hiddev.o: ../Profile/hiddev.c \
  E:\Project\CH582M_joyticks\HAL\include/WS2812.h \
  E:\Project\CH582M_joyticks\HAL\include/USB.h \
  E:\Project\CH582M_joyticks\HAL\include/ICM20602.h \
- E:\Project\CH582M_joyticks\HAL\include/HW_I2C.h \
- E:\Project\CH582M_joyticks\Profile\include/battservice.h \
- E:\Project\CH582M_joyticks\Profile\include/scanparamservice.h \
- E:\Project\CH582M_joyticks\Profile\include/devinfoservice.h \
- E:\Project\CH582M_joyticks\Profile\include/hiddev.h
-
-E:\Project\CH582M_joyticks\HAL\include/HAL.h:
+ E:\Project\CH582M_joyticks\HAL\include/HW_I2C.h
 
 E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH58x_common.h:
 
@@ -74,6 +68,8 @@ E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH58x_usbhost.h:
 
 E:\Project\CH582M_joyticks\StdPeriphDriver\inc/ISP583.h:
 
+E:\Project\CH582M_joyticks\HAL\include/HAL.h:
+
 E:\Project\CH582M_joyticks\HAL\include/config.h:
 
 E:\Project\CH582M_joyticks\LIB/CH58xBLE_LIB.H:
@@ -105,11 +101,3 @@ E:\Project\CH582M_joyticks\HAL\include/USB.h:
 E:\Project\CH582M_joyticks\HAL\include/ICM20602.h:
 
 E:\Project\CH582M_joyticks\HAL\include/HW_I2C.h:
-
-E:\Project\CH582M_joyticks\Profile\include/battservice.h:
-
-E:\Project\CH582M_joyticks\Profile\include/scanparamservice.h:
-
-E:\Project\CH582M_joyticks\Profile\include/devinfoservice.h:
-
-E:\Project\CH582M_joyticks\Profile\include/hiddev.h:

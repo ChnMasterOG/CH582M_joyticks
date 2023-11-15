@@ -27,11 +27,11 @@ extern "C"
  */
 
 // Number of HID reports defined in the service
-#define HID_NUM_REPORTS        3
+#define HID_NUM_REPORTS         3
 
 // HID Report IDs for the service
-#define HID_RPT_ID_JOYTICK_IN    0                    // Joytick input report ID
-#define HID_RPT_ID_FEATURE     0                      // Feature report ID
+#define HID_RPT_ID_JOYTICK_IN   0                   // Joytick input report ID
+#define HID_RPT_ID_FEATURE      0                   // Feature report ID
 
 // HID feature flags
 #define HID_FEATURE_FLAGS      HID_FLAGS_REMOTE_WAKE

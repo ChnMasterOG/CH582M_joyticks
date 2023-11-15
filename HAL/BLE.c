@@ -157,6 +157,8 @@ static uint8_t hidEmuRptCB(uint8_t id, uint8_t type, uint16_t uuid,
                            uint8_t oper, uint16_t *pLen, uint8_t *pData);
 static void    hidEmuEvtCB(uint8_t evt);
 static void    hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent);
+static void    hidEmuSendJotickReport(uint8_t L_X_data, uint8_t L_Y_data,
+                                      uint8_t R_X_data, uint8_t R_Y_data, uint16_t buttons);
 
 /*********************************************************************
  * PROFILE CALLBACKS
@@ -249,6 +251,7 @@ void HidEmu_Init()
  */
 uint16_t HidEmu_ProcessEvent(uint8_t task_id, uint16_t events)
 {
+    static uint8_t test_u8 = 1;
     if(events & SYS_EVENT_MSG)
     {
         uint8_t *pMsg;
@@ -294,7 +297,10 @@ uint16_t HidEmu_ProcessEvent(uint8_t task_id, uint16_t events)
 
     if(events & START_REPORT_EVT)
     {
-        tmos_start_task(hidEmuTaskId, START_REPORT_EVT, 800);
+        hidEmuSendJotickReport(0, 0, 0, 0, test_u8);
+        test_u8 <<= 1;
+        if (test_u8 & 0x10) test_u8 = 1;
+        tmos_start_task(hidEmuTaskId, START_REPORT_EVT, 1000);
         return (events ^ START_REPORT_EVT);
     }
     return 0;
@@ -325,12 +331,24 @@ static void hidEmu_ProcessTMOSMsg(tmos_event_hdr_t *pMsg)
  *
  * @param   L_data - L axis move data
  *          R_data - R axis move data
+ *          buttons - 10 bit buttons
  *
  * @return  none
  */
-static void hidEmuSendJotickReport(uint8_t L_data, uint8_t R_data, uint8_t buttons)
+static void hidEmuSendJotickReport(uint8_t L_X_data, uint8_t L_Y_data,
+                                   uint8_t R_X_data, uint8_t R_Y_data, uint16_t buttons)
 {
+    uint8_t buf[3];
 
+    buf[0] = L_X_data;
+    buf[1] = L_Y_data;
+    buf[2] = R_X_data;
+    buf[3] = R_Y_data;
+    buf[4] = buttons & 0xFF;
+    buf[5] = (buttons >> 8) & 0x3;
+
+    HidDev_Report(HID_RPT_ID_JOYTICK_IN, HID_REPORT_TYPE_INPUT,
+                  6, buf);
 }
 
 /*********************************************************************
