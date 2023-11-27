@@ -32,6 +32,7 @@ void WS2812_PWM_Init( void )
   WS2812_GPIO_(ResetBits)( WS2812_Pin );
 
   WS2812_Style_Off( );
+//  led_style_func = WS2812_Style_Breath;
 }
 
 /*******************************************************************************

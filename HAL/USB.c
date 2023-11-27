@@ -444,7 +444,7 @@ const unsigned char usbd_hid_report_gamepad_descriptor[HID_REPORT_GAMEPAD_DESC_S
         0x09, 0x31, // USAGE (Y)
         0x15, 0xFF, // LOGICAL_MINIMUM (-1)
         0x25, 0x01, // LOGICAL_MAXIMUM (1)
-        0x95, 0x04, // REPORT_COUNT (4) - count 4
+        0x95, 0x02, // REPORT_COUNT (2) - count 2
         0x75, 0x08, // REPORT_SIZE (8) - 8 bit
         0x81, 0x02, // INPUT (Data, Var, Abs)
         0xC0,
@@ -486,7 +486,6 @@ static void usbd_hid_gamepad_out_callback(uint8_t ep, uint32_t nbytes)
 
 USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t raw_buffer[32] = { 0 };
 USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t cdc_buffer[0x40];
-USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t joy_hid_buffer[6] = { 0 };
 
 static void usbd_hid_raw_in_callback(uint8_t ep, uint32_t nbytes)
 {
@@ -635,7 +634,7 @@ void usb_printf(char *pFormat, ...)
 
     cdc_ep_tx_busy_flag = TRUE;
     usbd_ep_start_write(USBD_IF3_AL0_EP0_ADDR, pStr, 0x40);
-    while (cdc_ep_tx_busy_flag);
+//    while (cdc_ep_tx_busy_flag);
 }
 
 /*--------------------------- define for msc ---------------------------*/
@@ -678,7 +677,9 @@ tmosEvents USB_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 
     if ( events & USB_SEND_JOY_REPORT_EVENT )
     {
-        usbd_ep_start_write(USBD_IF0_AL0_EP0_ADDR, joy_hid_buffer, sizeof(joy_hid_buffer));
+        usbd_ep_start_write(USBD_IF0_AL0_EP0_ADDR, joy_hid_buffer, 4);
+//        hid_state = HID_STATE_BUSY;
+//        while (hid_state != HID_STATE_IDLE);
         return events ^ USB_SEND_JOY_REPORT_EVENT;
     }
 

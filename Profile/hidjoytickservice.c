@@ -90,7 +90,7 @@ static const uint8_t hidReportMap[] = {
     0x09, 0x31, // USAGE (Y)
     0x15, 0xFF, // LOGICAL_MINIMUM (-1)
     0x25, 0x01, // LOGICAL_MAXIMUM (1)
-    0x95, 0x04, // REPORT_COUNT (4) - count 4
+    0x95, 0x02, // REPORT_COUNT (2) - count 2
     0x75, 0x08, // REPORT_SIZE (8) - 8 bit
     0x81, 0x02, // INPUT (Data, Var, Abs)
     0xC0,

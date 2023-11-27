@@ -10,7 +10,23 @@
  
 #include "HAL.h"
 
-uint16_t switch_data[4] = { 0 };
+switch_data_t switch_data[4];
+
+/*******************************************************************************
+ * Function Name  : SWITCH_data_deinit
+ * Description    : SWITCH摇杆参数默认值
+ * Input          : None
+ * Return         : None
+ *******************************************************************************/
+void SWITCH_data_deinit( void )
+{
+    uint8_t i;
+
+    for (i = 0; i < 4; i++) {
+        switch_data[i].adc_thr_h = SWITCH_DEFAULT_THR_H;
+        switch_data[i].adc_thr_l = SWITCH_DEFAULT_THR_L;
+    }
+}
 
 /*******************************************************************************
  * Function Name  : SWITCH_Init
@@ -34,26 +50,56 @@ void SWITCH_Init( void )
  *******************************************************************************/
 void SWITCH_ADC_ENABLE( uint8_t index )
 {
+    uint16_t adc_data;
     uint8_t chn;
+    uint8_t idx_hid = index >= 2 ? index - 2 : index;
+    uint8_t region;
 
     switch (index) {
         case 0:
-            chn = 6;
-            break;
-        case 1:
             chn = 7;
             break;
+        case 1:
+            chn = 6;
+            break;
         case 2:
-            chn = 9;
+            chn = 8;
             break;
         case 3:
-            chn = 8;
+            chn = 9;
             break;
         default:
             return;
     }
+    ADC_ExtSingleChSampInit(SampleFreq_3_2, ADC_PGA_1_4);
     ADC_ChannelCfg( chn );
-    ADC_StartUp();
-    while (!(R8_ADC_INT_FLAG & RB_ADC_IF_EOC));
-    switch_data[index] = R16_ADC_DATA;
+    adc_data = ADC_ExcutSingleConver();
+    if (idx_hid == 0) {
+        if (adc_data < SWITCH_DEFAULT_THR_L && switch_data[index].adc_data >= SWITCH_DEFAULT_THR_L)
+            joy_hid_buffer[idx_hid] = 1;
+        else if (adc_data > SWITCH_DEFAULT_THR_H && switch_data[index].adc_data <= SWITCH_DEFAULT_THR_H)
+            joy_hid_buffer[idx_hid] = -1;
+        else if (adc_data <= SWITCH_DEFAULT_THR_H && adc_data >= SWITCH_DEFAULT_THR_L &&
+                 (switch_data[index].adc_data > SWITCH_DEFAULT_THR_H || switch_data[index].adc_data < SWITCH_DEFAULT_THR_L))
+            joy_hid_buffer[idx_hid] = 0;
+        else {
+            switch_data[index].adc_data = adc_data;
+            return;
+        }
+    } else {
+        if (adc_data < SWITCH_DEFAULT_THR_L && switch_data[index].adc_data >= SWITCH_DEFAULT_THR_L)
+            joy_hid_buffer[idx_hid] = -1;
+        else if (adc_data > SWITCH_DEFAULT_THR_H && switch_data[index].adc_data <= SWITCH_DEFAULT_THR_H)
+            joy_hid_buffer[idx_hid] = 1;
+        else if (adc_data <= SWITCH_DEFAULT_THR_H && adc_data >= SWITCH_DEFAULT_THR_L &&
+                 (switch_data[index].adc_data > SWITCH_DEFAULT_THR_H || switch_data[index].adc_data < SWITCH_DEFAULT_THR_L))
+            joy_hid_buffer[idx_hid] = 0;
+        else {
+            switch_data[index].adc_data = adc_data;
+            return;
+        }
+    }
+    switch_data[index].adc_data = adc_data;
+    tmos_set_event(usbTaskID, USB_SEND_JOY_REPORT_EVENT);
+    tmos_set_event(hidEmuTaskId, BLE_SEND_JOY_REPORT_EVENT);
 }

@@ -4,6 +4,7 @@ encoding//APP/tp78_joyticks_via.h=UTF-8
 encoding//CherryUSB/class/cdc/usb_cdc.h=GBK
 encoding//CherryUSB/class/cdc/usbd_cdc.c=GBK
 encoding//CherryUSB/class/msc/usbd_msc.c=GBK
+encoding//CherryUSB/common/usb_mem.h=GBK
 encoding//CherryUSB/desc.c=GBK
 encoding//CherryUSB/usb_config.h=GBK
 encoding//HAL/BATTERY.c=UTF-8

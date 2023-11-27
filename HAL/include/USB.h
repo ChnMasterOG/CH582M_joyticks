@@ -37,7 +37,6 @@
     #define USB_ERR_UNKNOWN             0x10
 
     extern tmosTaskID usbTaskID;
-    extern uint8_t joy_hid_buffer[6];
 
     void usb_printf(char *pFormat, ...);
     void HAL_USBInit( void );

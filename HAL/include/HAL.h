@@ -46,8 +46,7 @@ extern "C"
  */
 
 extern tmosTaskID halTaskID;
-extern uint8_t HIDMouse[4];
-extern uint8_t HIDKeyboard[8];
+extern uint8_t joy_hid_buffer[4];
 
 /*********************************************************************
  * GLOBAL FUNCTIONS

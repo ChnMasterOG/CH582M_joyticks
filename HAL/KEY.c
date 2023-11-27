@@ -41,9 +41,10 @@ static halKeyCBack_t pHalKeyProcessFunction;	    /* callback function */
  **************************************************************************************************/
 void HAL_key_callback( uint16_t keys )
 {
-    joy_hid_buffer[4] = keys & 0xFF;
-    joy_hid_buffer[5] = (keys >> 8) & 0x3;
+    joy_hid_buffer[2] = keys & 0xFF;
+    joy_hid_buffer[3] = (keys >> 8) & 0x3;
     tmos_set_event(usbTaskID, USB_SEND_JOY_REPORT_EVENT);
+    tmos_set_event(hidEmuTaskId, BLE_SEND_JOY_REPORT_EVENT);
 }
 
 /**************************************************************************************************
@@ -64,9 +65,9 @@ void HAL_KeyInit( void )
     KEY1_DIR; KEY2_DIR; KEY3_DIR; KEY4_DIR;
     KEY5_DIR; KEY6_DIR; KEY7_DIR; KEY8_DIR;
     KEY9_DIR; KEY10_DIR;
-    KEY1_PD; KEY2_PD; KEY3_PD; KEY4_PD;
-    KEY5_PD; KEY6_PD; KEY7_PD; KEY8_PD;
-    KEY9_PD; KEY10_PD;
+    KEY1_PU; KEY2_PU; KEY3_PU; KEY4_PU;
+    KEY5_PU; KEY6_PU; KEY7_PU; KEY8_PU;
+    KEY9_PU; KEY10_PU;
     HalKeyConfig( HAL_key_callback );
 }
 
@@ -167,7 +168,7 @@ void HAL_KeyPoll(void)
 	halKeySavedKeys = keys;	       /* Store the current keys for comparation next time */
 
     /* Invoke Callback if new keys were depressed */
-    if (keys && (pHalKeyProcessFunction))
+    if (pHalKeyProcessFunction)
         (pHalKeyProcessFunction) (keys);
 }
 

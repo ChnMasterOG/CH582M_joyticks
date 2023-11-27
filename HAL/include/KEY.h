@@ -57,33 +57,44 @@ extern "C"
 #define KEY3_PD        	(R32_PB_PD_DRV |= KEY3_BV)
 #define KEY4_PD        	(R32_PB_PD_DRV |= KEY4_BV)
 #define KEY5_PD         (R32_PA_PD_DRV |= KEY5_BV)
-#define KEY6_PD         (R32_PA_PD_DRV |= KEY6_BV)
+#define KEY6_PD         (R32_PB_PD_DRV |= KEY6_BV)
 #define KEY7_PD         (R32_PA_PD_DRV |= KEY7_BV)
-#define KEY8_PD         (R32_PA_PD_DRV |= KEY8_BV)
+#define KEY8_PD         (R32_PB_PD_DRV |= KEY8_BV)
 #define KEY9_PD         (R32_PB_PD_DRV |= KEY9_BV)
 #define KEY10_PD        (R32_PB_PD_DRV |= KEY10_BV)
+
+#define KEY1_PU         {R32_PB_PD_DRV &= ~KEY1_BV; R32_PB_PU |= KEY1_BV;}
+#define KEY2_PU         {R32_PB_PD_DRV &= ~KEY2_BV; R32_PB_PU |= KEY2_BV;}
+#define KEY3_PU         {R32_PB_PD_DRV &= ~KEY3_BV; R32_PB_PU |= KEY3_BV;}
+#define KEY4_PU         {R32_PB_PD_DRV &= ~KEY4_BV; R32_PB_PU |= KEY4_BV;}
+#define KEY5_PU         {R32_PA_PD_DRV &= ~KEY5_BV; R32_PA_PU |= KEY5_BV;}
+#define KEY6_PU         {R32_PB_PD_DRV &= ~KEY6_BV; R32_PB_PU |= KEY6_BV;}
+#define KEY7_PU         {R32_PA_PD_DRV &= ~KEY7_BV; R32_PA_PU |= KEY7_BV;}
+#define KEY8_PU         {R32_PB_PD_DRV &= ~KEY8_BV; R32_PB_PU |= KEY8_BV;}
+#define KEY9_PU         {R32_PB_PD_DRV &= ~KEY9_BV; R32_PB_PU |= KEY9_BV;}
+#define KEY10_PU        {R32_PB_PD_DRV &= ~KEY10_BV; R32_PB_PU |= KEY10_BV;}
 
 #define KEY1_DIR       	(R32_PB_DIR &= ~KEY1_BV)
 #define KEY2_DIR        (R32_PB_DIR &= ~KEY2_BV)
 #define KEY3_DIR        (R32_PB_DIR &= ~KEY3_BV)
 #define KEY4_DIR        (R32_PB_DIR &= ~KEY4_BV)
 #define KEY5_DIR        (R32_PA_DIR &= ~KEY5_BV)
-#define KEY6_DIR        (R32_PA_DIR &= ~KEY6_BV)
+#define KEY6_DIR        (R32_PB_DIR &= ~KEY6_BV)
 #define KEY7_DIR        (R32_PA_DIR &= ~KEY7_BV)
-#define KEY8_DIR        (R32_PA_DIR &= ~KEY8_BV)
+#define KEY8_DIR        (R32_PB_DIR &= ~KEY8_BV)
 #define KEY9_DIR        (R32_PB_DIR &= ~KEY9_BV)
 #define KEY10_DIR       (R32_PB_DIR &= ~KEY10_BV)
 
-#define KEY1_IN        	(ACTIVE_HIGH(R32_PB_PIN&KEY1_BV)) // 检测低ACTIVE_LOW
-#define KEY2_IN        	(ACTIVE_HIGH(R32_PB_PIN&KEY2_BV))
-#define KEY3_IN        	(ACTIVE_HIGH(R32_PB_PIN&KEY3_BV))
-#define KEY4_IN        	(ACTIVE_HIGH(R32_PB_PIN&KEY4_BV))
-#define KEY5_IN         (ACTIVE_HIGH(R32_PA_PIN&KEY5_BV))
-#define KEY6_IN         (ACTIVE_HIGH(R32_PA_PIN&KEY6_BV))
-#define KEY7_IN         (ACTIVE_HIGH(R32_PA_PIN&KEY7_BV))
-#define KEY8_IN         (ACTIVE_HIGH(R32_PA_PIN&KEY8_BV))
-#define KEY9_IN         (ACTIVE_HIGH(R32_PB_PIN&KEY9_BV))
-#define KEY10_IN        (ACTIVE_HIGH(R32_PB_PIN&KEY10_BV))
+#define KEY1_IN        	(ACTIVE_LOW(R32_PB_PIN&KEY1_BV))
+#define KEY2_IN        	(ACTIVE_LOW(R32_PB_PIN&KEY2_BV))
+#define KEY3_IN        	(ACTIVE_LOW(R32_PB_PIN&KEY3_BV))
+#define KEY4_IN        	(ACTIVE_LOW(R32_PB_PIN&KEY4_BV))
+#define KEY5_IN         (ACTIVE_LOW(R32_PA_PIN&KEY5_BV))
+#define KEY6_IN         (ACTIVE_LOW(R32_PB_PIN&KEY6_BV))
+#define KEY7_IN         (ACTIVE_LOW(R32_PA_PIN&KEY7_BV))
+#define KEY8_IN         (ACTIVE_LOW(R32_PB_PIN&KEY8_BV))
+#define KEY9_IN         (ACTIVE_LOW(R32_PB_PIN&KEY9_BV))
+#define KEY10_IN        (ACTIVE_LOW(R32_PB_PIN&KEY10_BV))
 
 #define HAL_PUSH_BUTTON1()          ( KEY1_IN ) //添加自定义按键
 #define HAL_PUSH_BUTTON2()          ( KEY2_IN )

@@ -30,7 +30,7 @@
   #define PWM_SEND_LOW_BIT()                TMR1_PWMActDataWidth(TIMING_ZERO)   //0.4us
   #define PWM_SEND_RESET()                  TMR1_PWMActDataWidth(TIMING_RESET)  //0us
 
-  #define LED_NUMBER                        8   // 8个灯
+  #define LED_NUMBER                        6   // 6个灯
   #define LED_DEFAULT_BRIGHTNESS            15  // 默认亮度 - 15/255
 
   #define Waterful_Repeat_Times             2   // 控制周期*2 = 流水灯周期

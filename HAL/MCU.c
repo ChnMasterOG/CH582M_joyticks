@@ -12,6 +12,7 @@
 #include "HAL.h"
 
 tmosTaskID halTaskID = INVALID_TASK_ID;
+__attribute__((aligned(4))) uint8_t joy_hid_buffer[4] = { 0 };  // X_data, Y_data, button_L, button_H
 
 /*******************************************************************************
  * @fn          Lib_Calibration_LSI
@@ -228,6 +229,7 @@ tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
     {
         for (i = 0; i < 4; i++)
             SWITCH_ADC_ENABLE(i);
+//        usb_printf("%d %d %d %d \r\n", switch_data[0].adc_data, switch_data[1].adc_data, switch_data[2].adc_data, switch_data[3].adc_data);
         tmos_start_task(halTaskID, SWITCH_EVENT, MS1_TO_SYSTEM_TIME(SWITCH_THREAD_PREIOD));
         return events ^ SWITCH_EVENT;
     }
@@ -241,8 +243,8 @@ tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 
     if (events & BATTERY_EVENT)
     {
-        BATTERY_DMA_ENABLE();
-        BATTERY_ADC_Calculation();
+        BATTERY_ADC_Convert();
+//        usb_printf("%d \r\n", BAT_adcVal);
         tmos_start_task(halTaskID, BATTERY_EVENT, MS1_TO_SYSTEM_TIME(BATTERY_THREAD_PREIOD));
         return events ^ BATTERY_EVENT;
     }
@@ -272,15 +274,15 @@ void HAL_Init()
     HAL_TimeInit();
     ICM20602_init();
     ICM20602_gyro_offset_init();
-    SWITCH_Init();
     BATTERY_Init();
+    SWITCH_data_deinit();
+    SWITCH_Init();  // assert adc init
+    HAL_KeyInit();
     HAL_USBInit();
+    WS2812_PWM_Init();
 
     tmos_start_task(halTaskID, ICM_EVENT, MS1_TO_SYSTEM_TIME(1000));
     tmos_start_task(halTaskID, WS2812_EVENT, MS1_TO_SYSTEM_TIME(1000));
-#if (defined HAL_KEY) && (HAL_KEY == TRUE)
-    tmos_start_task(halTaskID, HAL_KEY_EVENT, MS1_TO_SYSTEM_TIME(1000));
-#endif
 #if(defined BLE_CALIBRATION_ENABLE) && (BLE_CALIBRATION_ENABLE == TRUE)
     tmos_start_task(halTaskID, HAL_REG_INIT_EVENT, MS1_TO_SYSTEM_TIME(BLE_CALIBRATION_PERIOD)); // 添加校准任务，单次校准耗时小于10ms
 #endif
