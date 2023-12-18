@@ -10,18 +10,21 @@
 
 #include <math.h>
 #include "ICM20602.h"
+#include "HAL.h"
 
 #ifndef PI
 #define PI          3.1415927
 #endif
-#define delta_T     0.001f  // sample rate: 1kHz
+#define delta_T     0.01f  // sample rate: 0.1kHz
 
 float I_ex, I_ey, I_ez; // error integral
 quater_param_t Q_info = {1, 0, 0, 0};   // quater number
 euler_param_t eulerAngle;   // euler angle
 icm20602_param_t icm20602_data;
-float icm_kp= 0.17; // convergence rate proportional gain of accelerometer
-float icm_ki= 0.004;    // Integral gain of gyroscope convergence rate
+float icm_kp = 50.0; // convergence rate proportional gain of accelerometer
+float icm_ki = 0.02;    // Integral gain of gyroscope convergence rate
+
+float lock_pitch = 0, lock_roll = 0;
 
 static float MySqrt(float number)
 {
@@ -111,7 +114,7 @@ void ICM20602_gyro_offset_init(void)
 
 void ICM20602_get_orign_data(void)
 {
-    const float alpha = 0.3;    // low pass filter alpha
+    const float alpha = 0.35;    // low pass filter alpha
 
     /* unit: g */
     icm20602_data.acc_x = (((float)icm20602_data.raw_acc_x) * alpha) / 4096 + icm20602_data.acc_x * (1 - alpha);
@@ -164,9 +167,9 @@ void ICM20602_AHRS_update(icm20602_param_t* icm)
     ey = icm->acc_z * vx - icm->acc_x * vz;
     ez = icm->acc_x * vy - icm->acc_y * vx;
 
-    I_ex += halfT * ex;
-    I_ey += halfT * ey;
-    I_ez += halfT * ez;
+    I_ex += delta_T * ex;
+    I_ey += delta_T * ey;
+    I_ez += delta_T * ez;
 
     icm->gyro_x = icm->gyro_x + icm_kp* ex + icm_ki* I_ex;
     icm->gyro_y = icm->gyro_y + icm_kp* ey + icm_ki* I_ey;
@@ -233,5 +236,49 @@ void ICM20602_init(void)
     ICM20602_write_byte(ICM20602_GYRO_CONFIG, 0x18); // ¡À2000 dps
     ICM20602_write_byte(ICM20602_ACCEL_CONFIG, 0x10);    // ¡À8g
     ICM20602_write_byte(ICM20602_ACCEL_CONFIG_2, 0x03);  // accelerometer 44.8Hz/61.5Hz sample rate 1kHz
+
+    /* Config data */
+    lock_pitch = via_config.pitch_mid;
+    lock_roll = via_config.roll_mid;
 }
 
+float ICM20602_angle_diff(float angle1, float angle2, float max_angle)
+{
+    /* angle range [-180, 180) */
+    float val = angle1 - angle2;
+
+    if (val > max_angle)    // -180 -> 180
+        val = val - 360;
+    else if (val < -max_angle)  // 180 -> -180
+        val = val + 360;
+
+    return val;
+}
+
+void ICM20602_report(void)
+{
+    uint8_t *buffer0, *buffer1;
+    float pitch_ratio, roll_ratio;
+
+    if (via_config.gyro_axis_mirror_flag) {
+        buffer0 = &joy_hid_buffer[0];
+        buffer1 = &joy_hid_buffer[1];
+    } else {
+        buffer0 = &joy_hid_buffer[1];
+        buffer1 = &joy_hid_buffer[0];
+    }
+    pitch_ratio = ICM20602_angle_diff(eulerAngle.pitch, lock_pitch, 90.0) / 90.0 * via_config.pitch_sensitivity;
+    roll_ratio = ICM20602_angle_diff(eulerAngle.roll, lock_roll, 90.0) / 90.0 * via_config.roll_sensitivity;
+    if (pitch_ratio > 1.0) pitch_ratio = 1.0;
+    else if (pitch_ratio < -1.0) pitch_ratio = -1.0;
+    if (roll_ratio > 1.0) roll_ratio = 1.0;
+    else if (roll_ratio < -1.0) roll_ratio = -1.0;
+    *buffer0 = (char)(POINT_MAX * pitch_ratio);
+    *buffer1 = (char)(POINT_MAX * roll_ratio);
+    if (via_config.gyro_x_mirror_flag)
+        *buffer0 = -*buffer0;
+    if (via_config.gyro_y_mirror_flag)
+        *buffer1 = -*buffer1;
+    tmos_set_event(usbTaskID, USB_SEND_JOY_REPORT_EVENT);
+    tmos_set_event(hidEmuTaskId, BLE_SEND_JOY_REPORT_EVENT);
+}

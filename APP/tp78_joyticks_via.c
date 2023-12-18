@@ -11,6 +11,30 @@
 #include "tp78_joyticks_via.h"
 #include "HAL.h"
 
+__attribute__((aligned(EEPROM_BLOCK_SIZE))) flash_data_t via_config = {
+        .pitch_sensitivity = 1.0,
+        .roll_sensitivity = 1.0,
+        .roll_mid = 180.0,
+        .gyro_trigger_key = HAL_KEY_SW_MR,
+        .gyro_key_enable = TRUE,
+};
+
+/*******************************************************************************
+ * Function Name  : via_set_default_config
+ * Description    : via设置默认配置
+ * Input          : None
+ * Return         : None
+ *******************************************************************************/
+void via_set_default_config(void)
+{
+    memset(&via_config, 0, sizeof(via_config));
+    via_config.pitch_sensitivity = 1.0;
+    via_config.roll_sensitivity = 1.0;
+    via_config.roll_mid = 180.0;
+    via_config.gyro_trigger_key = HAL_KEY_SW_MR;
+    via_config.gyro_key_enable = TRUE;
+}
+
 /*******************************************************************************
  * Function Name  : via_custom_value_command
  * Description    : via客制化命令
@@ -24,32 +48,65 @@ static void via_custom_value_command(uint8_t *data, uint8_t len)
   uint8_t *command_value = &data[2];
 
   switch (*command_channel) {
-    case 0: { // wireless
+    case 0: { // switch configs
       switch (*command_value) {
-        case 1: { // id_BLE_device
-          uint16_t DeviceID;
+        case 1 ... 4: { // id_adc_max_value
           if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
-
+              via_config.adc_max_val[*command_value - 1] = data[4] | (data[3] << 8);
           } else {
-
+              data[4] = via_config.adc_max_val[*command_value - 1] & 0xFF;
+              data[3] = (via_config.adc_max_val[*command_value - 1] >> 8) & 0xFF;
           }
           break;
         }
-        case 2: { // id_RF_mode
-          uint16_t rf_ready;
+        case 5 ... 8: { // id_adc_min_value
           if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
-
+              via_config.adc_min_val[*command_value - 5] = data[4] | (data[3] << 8);
           } else {
-
+              data[4] = via_config.adc_min_val[*command_value - 5] & 0xFF;
+              data[3] = (via_config.adc_min_val[*command_value - 5] >> 8) & 0xFF;
           }
           break;
         }
-        case 3: { // id_RF_freq
-          uint16_t freq_level;
+        case 9 ... 12: { // id_adc_deadzone_h
           if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
-
+              via_config.adc_deadzone_h[*command_value - 9] = data[4] | (data[3] << 8);
           } else {
-
+              data[4] = via_config.adc_deadzone_h[*command_value - 9] & 0xFF;
+              data[3] = (via_config.adc_deadzone_h[*command_value - 9] >> 8) & 0xFF;
+          }
+          break;
+        }
+        case 13 ... 16: { // id_adc_deadzone_l
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.adc_deadzone_l[*command_value - 13] = data[4] | (data[3] << 8);
+          } else {
+              data[4] = via_config.adc_deadzone_l[*command_value - 13] & 0xFF;
+              data[3] = (via_config.adc_deadzone_l[*command_value - 13] >> 8) & 0xFF;
+          }
+          break;
+        }
+        case 17: { // id_sw_x_mirror_flag
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.sw_x_mirror_flag = data[3];
+          } else {
+              data[3] = via_config.sw_x_mirror_flag;
+          }
+          break;
+        }
+        case 18: { // id_sw_y_mirror_flag
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.sw_y_mirror_flag = data[3];
+          } else {
+              data[3] = via_config.sw_y_mirror_flag;
+          }
+          break;
+        }
+        case 19: { // id_sw_axis_mirror_flag
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.sw_axis_mirror_flag = data[3];
+          } else {
+              data[3] = via_config.sw_axis_mirror_flag;
           }
           break;
         }
@@ -59,23 +116,86 @@ static void via_custom_value_command(uint8_t *data, uint8_t len)
       }
       break;
     }
-    case 1: { // RGBLight
+    case 1: { // gyro configs
       switch (*command_value) {
-        case 1: { // id_BLE_device
-          uint16_t ledstyle;
+        case 1: { // id_pitch_sensitivity
           if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
-
+              via_config.pitch_sensitivity = (float)(data[4] | (data[3] << 8)) / 100;
           } else {
-
+              data[4] = (uint16_t)(via_config.pitch_sensitivity * 100) & 0xFF;
+              data[3] = ((uint16_t)(via_config.pitch_sensitivity * 100) >> 8) & 0xFF;
           }
           break;
         }
-        case 2: { // id_LED_Brightness
-          uint16_t brightness;
+        case 2: { // id_roll_sensitivity
           if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
-
+              via_config.roll_sensitivity = (float)(data[4] | (data[3] << 8)) / 100;
           } else {
-
+              data[4] = (uint16_t)(via_config.roll_sensitivity * 100) & 0xFF;
+              data[3] = ((uint16_t)(via_config.roll_sensitivity * 100) >> 8) & 0xFF;
+          }
+          break;
+        }
+        case 3: { // id_pitch_mid
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.pitch_mid = (float)(data[4] | (data[3] << 8)) / 100 - 180.0;
+          } else {
+              data[4] = (uint16_t)((via_config.pitch_mid + 180.0) * 100) & 0xFF;
+              data[3] = ((uint16_t)((via_config.pitch_mid + 180.0) * 100) >> 8) & 0xFF;
+          }
+          break;
+        }
+        case 4: { // id_roll_mid
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.roll_mid = (float)(data[4] | (data[3] << 8)) / 100 - 180.0;
+          } else {
+              data[4] = (uint16_t)((via_config.roll_mid + 180.0) * 100) & 0xFF;
+              data[3] = ((uint16_t)((via_config.roll_mid + 180.0) * 100) >> 8) & 0xFF;
+          }
+          break;
+        }
+        case 5: { // id_gyro_key_enable
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.gyro_key_enable = data[3];
+          } else {
+              data[3] = via_config.gyro_key_enable;
+          }
+          break;
+        }
+        case 6: { // id_gyro_x_mirror_flag
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.gyro_x_mirror_flag = data[3];
+          } else {
+              data[3] = via_config.gyro_x_mirror_flag;
+          }
+          break;
+        }
+        case 7: { // id_gyro_y_mirror_flag
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.gyro_y_mirror_flag = data[3];
+          } else {
+              data[3] = via_config.gyro_y_mirror_flag;
+          }
+          break;
+        }
+        case 8: { // id_gyro_axis_mirror_flag
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.gyro_axis_mirror_flag = data[3];
+          } else {
+              data[3] = via_config.gyro_axis_mirror_flag;
+          }
+          break;
+        }
+        case 9: { // gyro_trigger_key
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.gyro_trigger_key = (1 << data[3]);
+          } else {
+              for (uint8_t i = 1; i < 16; i++) {
+                  if (via_config.gyro_trigger_key & (1 << i)) {
+                      data[3] = i;
+                      break;
+                  }
+              }
           }
           break;
         }
@@ -88,6 +208,10 @@ static void via_custom_value_command(uint8_t *data, uint8_t len)
     default: {
       break;
     }
+  }
+
+  if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+      SWITCH_data_read_fromVIA();
   }
 }
 
@@ -117,20 +241,11 @@ void via_data_processing(uint8_t *data, uint8_t len)
               break;
           }
           case (uint8_t)VIA_ID_LAYOUT_OPTIONS: {
-              /* TP78 unsupport this command */
+              /* unsupport this command */
               break;
           }
           case (uint8_t)VIA_ID_SWITCH_MATRIX_STATE: {
               /* report KeyMatrix */
-              uint8_t i, j, temp, k = 2;
-//              for (i = 0; i < ROW_SIZE; i++) {
-//                command_data[k] = 0;
-//                for (j = COL_SIZE - 1; j != 0xFF; j--) {
-//                  temp = j % 8;
-//                  if (KeyMatrix[j][i]) command_data[k] |= 1 << temp;  // is pressed
-//                  if (temp == 0) k++;
-//                }
-//              }
               break;
           }
           case (uint8_t)VIA_ID_FIRMWARE_VERSION: {
@@ -169,42 +284,21 @@ void via_data_processing(uint8_t *data, uint8_t len)
           command_data[2] = col
         **************************/
         command_data[3] = 0;
-//        if (command_data[1] > ROW_SIZE || command_data[2] > COL_SIZE) {
-//          command_data[4] = 0;
-//          break;
-//        }
-//        if (command_data[0] == 0) // layer 0
-//          command_data[4] = CustomKey[command_data[1]][command_data[2]];
-//        else  // layer 1
-//          command_data[4] = Extra_CustomKey[command_data[1]][command_data[2]];
         break;
     }
     case (uint8_t)VIA_ID_DYNAMIC_KEYMAP_SET_KEYCODE: {
-        /********* format *********
-          command_data[0] = layer
-          command_data[1] = row
-          command_data[2] = col
-        **************************/
-//        if (command_data[1] > ROW_SIZE || command_data[2] > COL_SIZE) break;
-//        if (command_data[0] == 0) { // layer 0
-//          CustomKey[command_data[1]][command_data[2]] = command_data[4];
-//          HAL_Fs_Write_keyboard_mat("0:keyboard_mat.txt", (const uint8_t*)CustomKey);
-//        } else {  // layer 1
-//          Extra_CustomKey[command_data[1]][command_data[2]] = command_data[4];
-//          HAL_Fs_Write_keyboard_mat("0:keyboard_ext_mat.txt", (const uint8_t*)Extra_CustomKey);
-//        }
         break;
     }
     case (uint8_t)VIA_ID_DYNAMIC_KEYMAP_RESET: {
-//        memcpy(CustomKey, KeyArrary, COL_SIZE*ROW_SIZE);
-//        memcpy(Extra_CustomKey, Extra_KeyArrary, COL_SIZE*ROW_SIZE);
-//        DATAFLASH_Write_KeyArray();
         break;
     }
     case (uint8_t)VIA_ID_CUSTOM_SET_VALUE:
-    case (uint8_t)VIA_ID_CUSTOM_GET_VALUE:
-    case (uint8_t)VIA_ID_CUSTOM_SAVE: {
+    case (uint8_t)VIA_ID_CUSTOM_GET_VALUE: {
         via_custom_value_command(data, len);
+        break;
+    }
+    case (uint8_t)VIA_ID_CUSTOM_SAVE: {
+        via_data_write();
         break;
     }
     case (uint8_t)VIA_ID_DYNAMIC_KEYMAP_MACRO_GET_COUNT: {
@@ -239,56 +333,15 @@ void via_data_processing(uint8_t *data, uint8_t len)
         break;
     }
     case (uint8_t)VIA_ID_DYNAMIC_KEYMAP_GET_LAYER_COUNT: {
-        command_data[0] = 2;  // layer 0 - main, layer 1 - extra
+        command_data[0] = 1;  // layer
         break;
     }
     case (uint8_t)VIA_ID_DYNAMIC_KEYMAP_GET_BUFFER: {
         /* via is used uint16 to record keymap */
-        uint8_t *keyarr_ptr;
-        uint16_t offset = (command_data[0] << 8) | command_data[1];
-        uint16_t size = command_data[2];
-        uint16_t i, j = 3, k = 0;
-        offset >>= 1; // uint16 to uint8
-        size >>= 1; // uint16 to uint8
-//        if (offset < (COL_SIZE + 1) * ROW_SIZE) { // layer 0
-//          keyarr_ptr = (uint8_t*)CustomKey;
-//        } else {  // layer 1
-//          keyarr_ptr = (uint8_t*)Extra_CustomKey;
-//          offset -= (COL_SIZE + 1) * ROW_SIZE;
-//        }
-//        keyarr_ptr += offset - offset / (COL_SIZE + 1); // 一行结束减去末尾空白键
-//        for (i = offset; i < offset + size; i++, j+=2) {
-//          if (i >= (COL_SIZE + 1) * ROW_SIZE) {
-//            command_data[j] = 0;
-//            command_data[j + 1] = 0;
-//          } else {
-//            command_data[j] = 0;  // MSB set to zero(USB为大端传输)
-//            if (i % (COL_SIZE + 1) == COL_SIZE) command_data[j + 1] = 0;  // 一行末尾保留空白
-//            else command_data[j + 1] = keyarr_ptr[k++];
-//          }
-//        }
         break;
     }
     case (uint8_t)VIA_ID_DYNAMIC_KEYMAP_SET_BUFFER: {
         /* via is used uint16 to record keymap */
-        uint8_t *keyarr_ptr;
-        uint16_t offset = (command_data[0] << 8) | command_data[1];
-        uint16_t size = command_data[2];
-        uint16_t i, j = 3, k = 0;
-        offset >>= 1; // uint16 to uint8
-        size >>= 1; // uint16 to uint8
-//        if (offset < (COL_SIZE + 1) * ROW_SIZE) { // layer 0
-//          keyarr_ptr = (uint8_t*)CustomKey;
-//        } else {  // layer 1
-//          keyarr_ptr = (uint8_t*)Extra_CustomKey;
-//          offset -= (COL_SIZE + 1) * ROW_SIZE;
-//        }
-//        keyarr_ptr += offset - offset / (COL_SIZE + 1); // 一行结束减去末尾空白键
-//        for (i = offset; i < offset + size; i++, j+=2) {
-//          if (i >= (COL_SIZE + 1) * ROW_SIZE) break;
-//          else if (i % (COL_SIZE + 1) != COL_SIZE) keyarr_ptr[k++] = command_data[j + 1];
-//        }
-//        DATAFLASH_Write_KeyArray(); // save configurations
         break;
     }
     case (uint8_t)VIA_ID_DYNAMIC_KEYMAP_GET_ENCODER: {
@@ -304,3 +357,29 @@ void via_data_processing(uint8_t *data, uint8_t len)
   }
 }
 
+/*******************************************************************************
+ * Function Name  : via_data_read
+ * Description    : 从flash读取via配置数据
+ * Input          : None
+ * Return         : None
+ *******************************************************************************/
+void via_data_read( void )
+{
+    EEPROM_READ(VIA_DATA_FLASH_ADDR, &via_config, sizeof(via_config));
+}
+
+/*******************************************************************************
+ * Function Name  : via_data_write
+ * Description    : 将via配置数据写入flash
+ * Input          : None
+ * Return         : None
+ *******************************************************************************/
+void via_data_write( void )
+{
+    uint32_t tmp;
+
+    SYS_DisableAllIrq(&tmp);
+    EEPROM_ERASE(VIA_DATA_FLASH_ADDR, EEPROM_BLOCK_SIZE);
+    EEPROM_WRITE(VIA_DATA_FLASH_ADDR, &via_config, sizeof(via_config));
+    SYS_RecoverIrq(tmp);
+}

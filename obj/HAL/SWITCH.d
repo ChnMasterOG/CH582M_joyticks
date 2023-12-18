@@ -19,6 +19,7 @@ HAL/SWITCH.o: ../HAL/SWITCH.c \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/ISP583.h \
  E:\Project\CH582M_joyticks\HAL\include/config.h \
  E:\Project\CH582M_joyticks\LIB/CH58xBLE_LIB.H \
+ E:\Project\CH582M_joyticks\APP/tp78_joyticks_via.h \
  E:\Project\CH582M_joyticks\HAL\include/RTC.h \
  E:\Project\CH582M_joyticks\HAL\include/SLEEP.h \
  E:\Project\CH582M_joyticks\HAL\include/LED.h \
@@ -73,6 +74,8 @@ E:\Project\CH582M_joyticks\StdPeriphDriver\inc/ISP583.h:
 E:\Project\CH582M_joyticks\HAL\include/config.h:
 
 E:\Project\CH582M_joyticks\LIB/CH58xBLE_LIB.H:
+
+E:\Project\CH582M_joyticks\APP/tp78_joyticks_via.h:
 
 E:\Project\CH582M_joyticks\HAL\include/RTC.h:
 

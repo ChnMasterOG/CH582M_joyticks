@@ -1,0 +1,173 @@
+{
+    "name": "TP78_joyticks",
+    "vendorId": "0x0418",
+    "productId": "0x78A2",
+    "menus": [
+      {
+        "label": "Configurations",
+        "content": [
+          {
+            "label": "Switch Configs",
+            "content": [
+              {
+                "label": "adc_max_value_0",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_max_value", 0, 1]
+              }, {
+                "label": "adc_max_value_1",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_max_value", 0, 2]
+              }, {
+                "label": "adc_max_value_2",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_max_value", 0, 3]
+              }, {
+                "label": "adc_max_value_3",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_max_value", 0, 4]
+              }, {
+                "label": "adc_min_value_0",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_min_value", 0, 5]
+              }, {
+                "label": "adc_min_value_1",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_min_value", 0, 6]
+              }, {
+                "label": "adc_min_value_2",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_min_value", 0, 7]
+              }, {
+                "label": "adc_min_value_3",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_min_value", 0, 8]
+              }, {
+                "label": "adc_deadzone_h_0",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_deadzone_h", 0, 9]
+              }, {
+                "label": "adc_deadzone_h_1",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_deadzone_h", 0, 10]
+              }, {
+                "label": "adc_deadzone_h_2",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_deadzone_h", 0, 11]
+              }, {
+                "label": "adc_deadzone_h_3",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_deadzone_h", 0, 12]
+              }, {
+                "label": "adc_deadzone_l_0",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_deadzone_l", 0, 13]
+              }, {
+                "label": "adc_deadzone_l_1",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_deadzone_l", 0, 14]
+              }, {
+                "label": "adc_deadzone_l_2",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_deadzone_l", 0, 15]
+              }, {
+                "label": "adc_deadzone_l_3",
+                "type": "range",
+                "options": [0, 4095],
+                "content": ["id_adc_deadzone_l", 0, 16]
+              }, {
+                "label": "x_mirror",
+                "type": "toggle",
+                "content": ["id_sw_x_mirror_flag", 0, 17]
+              }, {
+                "label": "y_mirror",
+                "type": "toggle",
+                "content": ["id_sw_y_mirror_flag", 0, 18]
+              }, {
+                "label": "axis_mirror",
+                "type": "toggle",
+                "content": ["id_sw_axis_mirror_flag", 0, 19]
+              }
+            ]
+          }, {
+            "label": "Gyro Configs",
+            "content": [
+              {
+                "label": "pitch_sensitivity(*100)",
+                "type": "range",
+                "options": [0, 1000],
+                "content": ["id_pitch_sensitivity", 1, 1]
+              }, {
+                "label": "roll_sensitivity(*100)",
+                "type": "range",
+                "options": [0, 1000],
+                "content": ["id_roll_sensitivity", 1, 2]
+              }, {
+                "label": "pitch_mid_angle(*100+18000)",
+                "type": "range",
+                "options": [0, 36000],
+                "content": ["id_pitch_mid", 1, 3]
+              }, {
+                "label": "roll_mid_angle(*100+18000)",
+                "type": "range",
+                "options": [0, 36000],
+                "content": ["id_roll_mid", 1, 4]
+              }, {
+                "label": "key_enable",
+                "type": "toggle",
+                "content": ["id_gyro_key_enable", 1, 5]
+              }, {
+                "label": "x_mirror",
+                "type": "toggle",
+                "content": ["id_gyro_x_mirror_flag", 1, 6]
+              }, {
+                "label": "y_mirror",
+                "type": "toggle",
+                "content": ["id_gyro_y_mirror_flag", 1, 7]
+              }, {
+                "label": "axis_mirror",
+                "type": "toggle",
+                "content": ["id_gyro_axis_mirror_flag", 1, 8]
+              }, {
+                "label": "trigger_key",
+                "type": "dropdown",
+                "options": [
+                  ["LEFT 1", 0],
+                  ["LEFT 2", 1],
+                  ["RIGHT 1", 2],
+                  ["RIGHT 2", 3],
+                  ["KEY BL", 4],
+                  ["KEY BR", 5],
+                  ["KEY ZL", 6],
+                  ["KEY ZR", 7],
+                  ["KEY ML", 8],
+                  ["KEY MR", 9]
+                ],
+                "content": ["gyro_trigger_key", 1, 9]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "matrix": {"rows": 0, "cols": 0},
+    "layouts": {
+      "labels": [],
+      "keymap": [
+      ]
+    }
+  }

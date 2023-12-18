@@ -125,6 +125,7 @@ typedef struct {
 extern quater_param_t Q_info;
 extern euler_param_t eulerAngle;
 extern icm20602_param_t icm20602_data;
+extern float lock_pitch, lock_roll;
 
 void ICM20602_get_acc(void);
 void ICM20602_get_gyro(void);
@@ -134,5 +135,6 @@ void ICM20602_AHRS_update(icm20602_param_t* icm);
 void ICM20602_euler_angle_update(void);
 void ICM20602_data_update(void);
 void ICM20602_init(void);
+void ICM20602_report(void);
 
 #endif

@@ -41,6 +41,7 @@
   extern WS2812_Style_Func led_style_func;
   extern uint8_t g_LED_brightness;
   extern BOOL WS2812_status;
+  extern uint8_t normal_style_color[3];
 
   uint8_t DATAFLASH_Read_LEDStyle( void );
   void DATAFLASH_Write_LEDStyle( uint16_t LED_Style_Number );
@@ -52,6 +53,8 @@
   void WS2812_Style_Touch( void );
   void WS2812_Style_Rainbow( void );
   void WS2812_Style_Custom( void );
+  void WS2812_Style_Warning( void );
+  void WS2812_Change_Style_to( WS2812_Style_Func f );
   void WS2812_Send( void );
 
 #endif

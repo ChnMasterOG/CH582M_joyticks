@@ -17,6 +17,7 @@ uint8_t g_LED_brightness = LED_DEFAULT_BRIGHTNESS;
 static uint8_t style_dir = 0;
 static uint32_t style_cnt = 0;
 BOOL WS2812_status = WS2812_STATUS_UNCHANGEED;
+uint8_t normal_style_color[3] = { LED_DEFAULT_BRIGHTNESS, LED_DEFAULT_BRIGHTNESS, LED_DEFAULT_BRIGHTNESS };
 
 /*******************************************************************************
  * Function Name  : WS2812_PWM_Init
@@ -58,7 +59,9 @@ void WS2812_Style_Normal( void )
   uint16_t i, j, memaddr = 0;
   for (i = 0; i < LED_NUMBER; i++)
   {
-    LED_BYTE_Buffer[i][GREEN_INDEX] = LED_BYTE_Buffer[i][RED_INDEX] = LED_BYTE_Buffer[i][BLUE_INDEX] = g_LED_brightness;
+    LED_BYTE_Buffer[i][GREEN_INDEX] = normal_style_color[GREEN_INDEX];
+    LED_BYTE_Buffer[i][RED_INDEX] = normal_style_color[RED_INDEX];
+    LED_BYTE_Buffer[i][BLUE_INDEX] = normal_style_color[BLUE_INDEX];
     /* transfer data */
     for (j = 0; j < 8; j++) // GREEN data
     {
@@ -286,6 +289,47 @@ void WS2812_Style_Custom( void )
       memaddr++;
     }
   }
+}
+
+/*******************************************************************************
+ * Function Name  : WS2812_Style_Warning
+ * Description    : PWM驱动WS2812产生提示
+ * Input          : None
+ * Return         : None
+ *******************************************************************************/
+void WS2812_Style_Warning( void )
+{
+  uint16_t j;
+
+  // 关闭上一个灯
+  uint32_t last_cnt = style_cnt == 0 ? LED_NUMBER-1 : style_cnt-1;
+  for (j = 0; j < 24; j++) {
+    LED_DMA_Buffer[(last_cnt % LED_NUMBER) * 24 + j] = TIMING_ZERO;
+  }
+  // 开启下一个灯
+  for (j = 0; j < 24; j++) {
+    if ( j < 8 ) {  // 亮绿灯提示
+      LED_DMA_Buffer[style_cnt * 24 + j] = TIMING_ONE;
+    } else {
+      LED_DMA_Buffer[style_cnt * 24 + j] = TIMING_ZERO;
+    }
+  }
+  ++style_cnt;
+  if (style_cnt >= LED_NUMBER ) {
+    WS2812_Change_Style_to(WS2812_Style_Off);
+  }
+}
+
+/*******************************************************************************
+ * Function Name  : WS2812_Change_Style_to
+ * Description    : WS2812切换style到f
+ * Input          : f - 要切换的style
+ * Return         : None
+ *******************************************************************************/
+void WS2812_Change_Style_to( WS2812_Style_Func f )
+{
+    WS2812_status = WS2812_STATUS_CHANGE_STYLE;
+    led_style_func = f;
 }
 
 /*******************************************************************************

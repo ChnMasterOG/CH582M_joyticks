@@ -13,6 +13,8 @@
 
 tmosTaskID halTaskID = INVALID_TASK_ID;
 __attribute__((aligned(4))) uint8_t joy_hid_buffer[4] = { 0 };  // X_data, Y_data, button_L, button_H
+uint8_t switch_calibration = FALSE;
+uint8_t gyro_enable = FALSE;
 
 /*******************************************************************************
  * @fn          Lib_Calibration_LSI
@@ -184,6 +186,7 @@ tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 {
     uint8_t *msgPtr;
     uint8_t i;
+    static uint32_t cal_time = 0;
 
     if (events & SYS_EVENT_MSG)
     { // 处理HAL层消息，调用tmos_msg_receive读取消息，处理完成后删除消息。
@@ -208,6 +211,13 @@ tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 #endif
     }
 
+    if (events & SEND_REPORT_EVENT)
+    {
+        tmos_set_event(usbTaskID, USB_SEND_JOY_REPORT_EVENT);
+        tmos_set_event(hidEmuTaskId, BLE_SEND_JOY_REPORT_EVENT);
+        return events ^ SEND_REPORT_EVENT;
+    }
+
     if (events & HAL_KEY_EVENT)
     {
 #if (defined HAL_KEY) && (HAL_KEY == TRUE)
@@ -220,6 +230,8 @@ tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
     if (events & ICM_EVENT)
     {
         ICM20602_data_update();
+        if (gyro_enable == TRUE)
+            ICM20602_report();
 //        usb_printf("pitch: %d, roll: %d\r\n", (int)(eulerAngle.pitch * 1000), (int)(eulerAngle.roll * 1000));
         tmos_start_task(halTaskID, ICM_EVENT, MS1_TO_SYSTEM_TIME(ICM_THREAD_PREIOD));
         return events ^ ICM_EVENT;
@@ -227,8 +239,42 @@ tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 
     if (events & SWITCH_EVENT)
     {
-        for (i = 0; i < 4; i++)
-            SWITCH_ADC_ENABLE(i);
+        if (switch_calibration == FALSE) {
+            for (i = 0; i < 4; i++)
+                SWITCH_ADC_ENABLE(i, 0);
+        } else if (switch_calibration == SWITCH_CAL_STEP1_START) {
+            SWITCH_data_reset();
+            switch_calibration = SWITCH_CAL_STEP1_SAMPLE;
+            SWITCH_Calibration(1, 0);
+            cal_time = 0;
+        } else if (switch_calibration == SWITCH_CAL_STEP1_SAMPLE) {
+            cal_time++;
+            SWITCH_Calibration(1, 1);
+            if (cal_time >= SWITCH_CAL_TIME * 1000 / SWITCH_THREAD_PREIOD) {
+                switch_calibration = SWITCH_CAL_STEP1_STOP;
+            }
+        } else if (switch_calibration == SWITCH_CAL_STEP1_STOP) {
+            switch_calibration = SWITCH_CAL_STEP2_START;
+            SWITCH_Calibration(1, 2);
+        } else if (switch_calibration == SWITCH_CAL_STEP2_START) {
+            switch_calibration = SWITCH_CAL_STEP2_SAMPLE;
+            SWITCH_Calibration(2, 0);
+            cal_time = 0;
+        } else if (switch_calibration == SWITCH_CAL_STEP2_SAMPLE) {
+            cal_time++;
+            SWITCH_Calibration(2, 1);
+            if (cal_time >= SWITCH_CAL_TIME * 1000 / SWITCH_THREAD_PREIOD) {
+                switch_calibration = SWITCH_CAL_STEP2_STOP;
+            }
+        } else if (switch_calibration == SWITCH_CAL_STEP2_STOP) {
+            switch_calibration = FALSE;
+            SWITCH_Calibration(2, 2);
+            SWITCH_data_sync_toVIA();
+            via_data_write();
+            for (i = 0; i < 4; i++)
+                usb_printf("CAL%d: %d %d %d %d \r\n", i, switch_data[i].adc_min_val, switch_data[i].adc_max_val, switch_data[i].adc_deadzone_l, switch_data[i].adc_deadzone_h);
+            SoftReset();
+        }
 //        usb_printf("%d %d %d %d \r\n", switch_data[0].adc_data, switch_data[1].adc_data, switch_data[2].adc_data, switch_data[3].adc_data);
         tmos_start_task(halTaskID, SWITCH_EVENT, MS1_TO_SYSTEM_TIME(SWITCH_THREAD_PREIOD));
         return events ^ SWITCH_EVENT;
@@ -272,17 +318,25 @@ void HAL_Init()
     halTaskID = TMOS_ProcessEventRegister( HAL_ProcessEvent );
 
     HAL_TimeInit();
+    via_data_read();
     ICM20602_init();
     ICM20602_gyro_offset_init();
     BATTERY_Init();
-    SWITCH_data_deinit();
     SWITCH_Init();  // assert adc init
     HAL_KeyInit();
     HAL_USBInit();
     WS2812_PWM_Init();
 
+    if (HAL_PUSH_BUTTON10()) {
+        DelayMs(10);
+        if (HAL_PUSH_BUTTON10())
+            switch_calibration = SWITCH_CAL_STEP1_START;
+    }
+
+if (switch_calibration == FALSE) {
     tmos_start_task(halTaskID, ICM_EVENT, MS1_TO_SYSTEM_TIME(1000));
     tmos_start_task(halTaskID, WS2812_EVENT, MS1_TO_SYSTEM_TIME(1000));
+}
 #if(defined BLE_CALIBRATION_ENABLE) && (BLE_CALIBRATION_ENABLE == TRUE)
     tmos_start_task(halTaskID, HAL_REG_INIT_EVENT, MS1_TO_SYSTEM_TIME(BLE_CALIBRATION_PERIOD)); // 添加校准任务，单次校准耗时小于10ms
 #endif

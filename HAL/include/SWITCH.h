@@ -23,21 +23,35 @@
 #define SWITCH_R_Y_IDX          2
 #define SWITCH_R_X_IDX          3
 
-#define SWITCH_DEFAULT_MAX      3100
-#define SWITCH_DEFAULT_MIN      1600
-#define SWITCH_DEFAULT_THR_L    (SWITCH_DEFAULT_MIN + (SWITCH_DEFAULT_MAX - SWITCH_DEFAULT_MIN) / 4)
-#define SWITCH_DEFAULT_THR_H    (SWITCH_DEFAULT_MAX - (SWITCH_DEFAULT_MAX - SWITCH_DEFAULT_MIN) / 4)
+#define SWITCH_DEFAULT_MAX              3100
+#define SWITCH_DEFAULT_MIN              1600
+#define SWITCH_DEFAULT_DEADZONE_VAL     100
+#define SWITCH_DEADZONE_MIN             50
+
+#define SWITCH_CAL_TIME                 10  // units: seconds
+#define SWITCH_CAL_STEP1_START          1
+#define SWITCH_CAL_STEP1_SAMPLE         2
+#define SWITCH_CAL_STEP1_STOP           3
+#define SWITCH_CAL_STEP2_START          4
+#define SWITCH_CAL_STEP2_SAMPLE         5
+#define SWITCH_CAL_STEP2_STOP           6
 
 typedef struct {
-    uint16_t adc_data;
-    uint16_t adc_thr_l;
-    uint16_t adc_thr_h;
+    uint16_t adc_deadzone_l;
+    uint16_t adc_deadzone_h;
+    uint16_t adc_data_mid;
+    uint16_t adc_max_val;
+    uint16_t adc_min_val;
 }switch_data_t;
 
 extern switch_data_t switch_data[4];
 
 void SWITCH_data_deinit( void );
+void SWITCH_data_reset( void );
+void SWITCH_data_read_fromVIA( void );
+void SWITCH_data_sync_toVIA( void );
 void SWITCH_Init( void );
-void SWITCH_ADC_ENABLE( uint8_t index );
+void SWITCH_ADC_ENABLE( uint8_t index, uint8_t mode );
+void SWITCH_Calibration( uint8_t mode, uint8_t ctl );
 
 #endif

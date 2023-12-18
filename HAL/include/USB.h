@@ -18,6 +18,10 @@
     #define CapsLockLED     0x02
     #define ScrollLockLED   0x04
 
+    #define POINT_MAX       (127)
+    #define POINT_MIN       (-127)
+    #define POINT_RANGE     (POINT_MAX-POINT_MIN)
+
     #define Volume_Play     (1 << 0)
     #define Volume_Next     (1 << 1)
     #define Volume_Prev     (1 << 2)

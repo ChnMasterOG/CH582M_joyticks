@@ -22,7 +22,7 @@
 #define USBD_VERSION 0x0110
 #define USBD_PRODUCT_VERSION 0x0001
 #define USBD_VID 0x0418
-#define USBD_PID 0x78A0
+#define USBD_PID 0x78A2
 #define USBD_MAX_POWER 0xfa
 #define USBD_LANGID_STRING 1033
 #define USBD_CONFIG_DESCRIPTOR_SIZE 139
@@ -241,13 +241,17 @@ const unsigned char usbd_descriptor[] = {
     0x65, 0x00,                                 /*!< 'e' wcChar6 */
     0x6c, 0x00,                                 /*!< 'l' wcChar7 */
 /********************************************** String 2 Descriptor */
-/* TP78 */
-    0x0a,                                       /*!< bLength */
+/* TP78_Joy */
+    0x12,                                       /*!< bLength */
     0x03,                                       /*!< bDescriptorType */
     0x54, 0x00,                                 /*!< 'T' wcChar0 */
     0x50, 0x00,                                 /*!< 'P' wcChar1 */
     0x37, 0x00,                                 /*!< '7' wcChar2 */
     0x38, 0x00,                                 /*!< '8' wcChar3 */
+    0x5f, 0x00,                                 /*!< '_' wcChar4 */
+    0x4a, 0x00,                                 /*!< 'J' wcChar5 */
+    0x6f, 0x00,                                 /*!< 'o' wcChar6 */
+    0x79, 0x00,                                 /*!< 'y' wcChar7 */
 /********************************************** String 3 Descriptor */
 /* Joyticks */
     0x12,                                       /*!< bLength */
@@ -435,15 +439,15 @@ const unsigned char usbd_hid_report_gamepad_descriptor_backup[52] = {
 /*!< USBD HID REPORT Descriptor - GamePad */
 const unsigned char usbd_hid_report_gamepad_descriptor[HID_REPORT_GAMEPAD_DESC_SIZE] = {
         0x05, 0x01, // USAGE_PAGE (Generic Desktop)
-        0x09, 0x05, // USAGE (Game Pad)
+        0x09, 0x04, // USAGE (Joystick)
         0xA1, 0x01, // COLLECTION (Application)
 
         0x09, 0x01, // USAGE (Pointer)
         0xA1, 0x00, // COLLECTION (Physical)
         0x09, 0x30, // USAGE (X)
         0x09, 0x31, // USAGE (Y)
-        0x15, 0xFF, // LOGICAL_MINIMUM (-1)
-        0x25, 0x01, // LOGICAL_MAXIMUM (1)
+        0x15, 0x81, // LOGICAL_MINIMUM (-127)
+        0x25, 0x7F, // LOGICAL_MAXIMUM (127)
         0x95, 0x02, // REPORT_COUNT (2) - count 2
         0x75, 0x08, // REPORT_SIZE (8) - 8 bit
         0x81, 0x02, // INPUT (Data, Var, Abs)

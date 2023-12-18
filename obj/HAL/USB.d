@@ -34,6 +34,7 @@ HAL/USB.o: ../HAL/USB.c \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/ISP583.h \
  E:\Project\CH582M_joyticks\HAL\include/config.h \
  E:\Project\CH582M_joyticks\LIB/CH58xBLE_LIB.H \
+ E:\Project\CH582M_joyticks\APP/tp78_joyticks_via.h \
  E:\Project\CH582M_joyticks\HAL\include/RTC.h \
  E:\Project\CH582M_joyticks\HAL\include/SLEEP.h \
  E:\Project\CH582M_joyticks\HAL\include/LED.h \
@@ -47,8 +48,7 @@ HAL/USB.o: ../HAL/USB.c \
  E:\Project\CH582M_joyticks\HAL\include/WS2812.h \
  E:\Project\CH582M_joyticks\HAL\include/USB.h \
  E:\Project\CH582M_joyticks\HAL\include/ICM20602.h \
- E:\Project\CH582M_joyticks\HAL\include/HW_I2C.h \
- E:\Project\CH582M_joyticks\APP/tp78_joyticks_via.h
+ E:\Project\CH582M_joyticks\HAL\include/HW_I2C.h
 
 E:\Project\CH582M_joyticks\CherryUSB\core/usbd_core.h:
 
@@ -120,6 +120,8 @@ E:\Project\CH582M_joyticks\HAL\include/config.h:
 
 E:\Project\CH582M_joyticks\LIB/CH58xBLE_LIB.H:
 
+E:\Project\CH582M_joyticks\APP/tp78_joyticks_via.h:
+
 E:\Project\CH582M_joyticks\HAL\include/RTC.h:
 
 E:\Project\CH582M_joyticks\HAL\include/SLEEP.h:
@@ -147,5 +149,3 @@ E:\Project\CH582M_joyticks\HAL\include/USB.h:
 E:\Project\CH582M_joyticks\HAL\include/ICM20602.h:
 
 E:\Project\CH582M_joyticks\HAL\include/HW_I2C.h:
-
-E:\Project\CH582M_joyticks\APP/tp78_joyticks_via.h:

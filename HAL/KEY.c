@@ -22,7 +22,7 @@
  **************************************************************************************************/
 
 static uint16 halKeySavedKeys;     /* 保留按键最后的状态，用于查询是否有键值变化 */
-
+static uint16 reset_counter = 0;
 
 /**************************************************************************************************
  *                                        FUNCTIONS - Local
@@ -41,10 +41,27 @@ static halKeyCBack_t pHalKeyProcessFunction;	    /* callback function */
  **************************************************************************************************/
 void HAL_key_callback( uint16_t keys )
 {
+    if ((keys & HAL_KEY_SW_ML) && (keys & HAL_KEY_SW_MR)) {
+        reset_counter++;
+    } else if (reset_counter != 0) {
+        if (reset_counter >= 5000 / KEY_THREAD_PREIOD) {
+            via_set_default_config();
+            via_data_write();
+            WS2812_Change_Style_to(WS2812_Style_Warning);
+        }
+        reset_counter = 0;
+    }
+    if (via_config.gyro_key_enable && (keys & via_config.gyro_trigger_key)) {
+        gyro_enable = !gyro_enable;
+        if (gyro_enable) {
+            lock_pitch = eulerAngle.pitch;
+            lock_roll = eulerAngle.roll;
+        }
+        return;
+    }
     joy_hid_buffer[2] = keys & 0xFF;
     joy_hid_buffer[3] = (keys >> 8) & 0x3;
-    tmos_set_event(usbTaskID, USB_SEND_JOY_REPORT_EVENT);
-    tmos_set_event(hidEmuTaskId, BLE_SEND_JOY_REPORT_EVENT);
+    tmos_start_task(halTaskID, SEND_REPORT_EVENT, MS1_TO_SYSTEM_TIME(2));
 }
 
 /**************************************************************************************************
@@ -161,6 +178,9 @@ void HAL_KeyPoll(void)
         keys |= HAL_KEY_SW_ML;
     if (HAL_PUSH_BUTTON10())
         keys |= HAL_KEY_SW_MR;
+
+    if (reset_counter != 0 && reset_counter < 0xFFFFFFFF)
+        reset_counter++;
 
 	if (keys == halKeySavedKeys)    /* Exit - since no keys have changed */
 		return;

@@ -20,6 +20,7 @@ extern "C"
 
 #include "CH58x_common.h"
 #include "config.h"
+#include "tp78_joyticks_via.h"
 #include "RTC.h"
 #include "SLEEP.h"
 #include "LED.h"
@@ -39,6 +40,7 @@ extern "C"
 #define ICM_EVENT               0x0004
 #define WS2812_EVENT            0x0008
 #define SWITCH_EVENT            0x0010
+#define SEND_REPORT_EVENT       0x1000
 #define HAL_REG_INIT_EVENT      0x2000
 
 /*********************************************************************
@@ -47,6 +49,7 @@ extern "C"
 
 extern tmosTaskID halTaskID;
 extern uint8_t joy_hid_buffer[4];
+extern uint8_t gyro_enable;
 
 /*********************************************************************
  * GLOBAL FUNCTIONS

@@ -79,6 +79,7 @@ static const uint8_t hidInfo[HID_INFORMATION_LEN] = {
 };
 
 // HID Report Map characteristic value
+#if 0
 static const uint8_t hidReportMap[] = {
     0x05, 0x01, // USAGE_PAGE (Generic Desktop)
     0x09, 0x05, // USAGE (Game Pad)
@@ -108,6 +109,10 @@ static const uint8_t hidReportMap[] = {
     0x81, 0x43, // INPUT (Cnst, Var, Abs, Null)
     0xC0,
 };
+#else
+extern const unsigned char  usbd_hid_report_gamepad_descriptor[46]; // HID_REPORT_GAMEPAD_DESC_SIZE
+#define hidReportMap        usbd_hid_report_gamepad_descriptor
+#endif
 
 // HID report map length
 uint16_t hidReportMapLen = sizeof(hidReportMap);
