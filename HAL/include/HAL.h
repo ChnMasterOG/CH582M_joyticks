@@ -48,7 +48,7 @@ extern "C"
  */
 
 extern tmosTaskID halTaskID;
-extern uint8_t joy_hid_buffer[4];
+extern uint8_t joy_hid_buffer[6];
 extern uint8_t gyro_enable;
 
 /*********************************************************************

@@ -12,7 +12,7 @@
 #include "HAL.h"
 
 tmosTaskID halTaskID = INVALID_TASK_ID;
-__attribute__((aligned(4))) uint8_t joy_hid_buffer[4] = { 0 };  // X_data, Y_data, button_L, button_H
+__attribute__((aligned(4))) uint8_t joy_hid_buffer[6] = { 0 };  // L_X_data, L_Y_data, R_X_data, R_Y_data, button_L, button_H
 uint8_t switch_calibration = FALSE;
 uint8_t gyro_enable = FALSE;
 

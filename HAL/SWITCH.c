@@ -114,7 +114,6 @@ void SWITCH_ADC_ENABLE( uint8_t index, uint8_t mode )
 {
     uint16_t adc_data;
     uint8_t chn;
-    uint8_t idx_hid = index >= 2 ? index - 2 : index;
     uint8_t region;
 
     switch (index) {
@@ -138,11 +137,10 @@ void SWITCH_ADC_ENABLE( uint8_t index, uint8_t mode )
     adc_data = ADC_ExcutSingleConver();
     if (mode == 0) {
         if (adc_data >= switch_data[index].adc_deadzone_l && adc_data <= switch_data[index].adc_deadzone_h) {
-            if (index < 2)
-                joy_hid_buffer[idx_hid] = 0;
+            joy_hid_buffer[index] = 0;
         } else {
-            joy_hid_buffer[idx_hid] = (int)POINT_RANGE * (adc_data - switch_data[index].adc_min_val) /
-                                      (switch_data[index].adc_max_val - switch_data[index].adc_min_val) + POINT_MIN;
+            joy_hid_buffer[index] = (int)POINT_RANGE * (adc_data - switch_data[index].adc_min_val) /
+                                    (switch_data[index].adc_max_val - switch_data[index].adc_min_val) + POINT_MIN;
         }
         if (index == 3) {
             if (via_config.sw_axis_mirror_flag) {

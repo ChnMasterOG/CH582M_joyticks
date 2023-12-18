@@ -63,7 +63,7 @@
 #define HID_REPORT_MOUSE_DESC_SIZE 74
 #define HID_REPORT_VOL_DESC_SIZE 33
 #define HID_REPORT_RAW_DESC_SIZE 34
-#define HID_REPORT_GAMEPAD_DESC_SIZE 46//52
+#define HID_REPORT_GAMEPAD_DESC_SIZE 65//46
 
 const unsigned char usbd_descriptor[] = {
 /********************************************** Device Descriptor */
@@ -401,42 +401,6 @@ const unsigned char usbd_hid_report_raw_descriptor[HID_REPORT_RAW_DESC_SIZE] = {
 
 #if 0
 /*!< USBD HID REPORT Descriptor - GamePad */
-const unsigned char usbd_hid_report_gamepad_descriptor_backup[52] = {
-        0x05, 0x01, // USAGE_PAGE (Generic Desktop)
-        0x09, 0x05, // USAGE (Game Pad)
-        0xA1, 0x01, // COLLECTION (Application)
-
-        0x09, 0x01, // USAGE (Pointer)
-        0xA1, 0x00, // COLLECTION (Physical)
-        0x09, 0x30, // USAGE (X)
-        0x09, 0x31, // USAGE (Y)
-        0x15, 0xFF, // LOGICAL_MINIMUM (-1)
-        0x25, 0x01, // LOGICAL_MAXIMUM (1)
-        0x95, 0x02, // REPORT_COUNT (2) - count 2
-        0x75, 0x02, // REPORT_SIZE (2) - 2 bit
-        0x81, 0x02, // INPUT (Data, Var, Abs)
-        0xC0,
-
-        0x95, 0x04, // REPORT_COUNT (4) - 填充8bit
-        0x75, 0x01, // REPORT_SIZE (1)
-        0x81, 0x43, // INPUT (Cnst, Var, Abs, Null)
-
-        0x05, 0x09, // USAGE_PAGE (Button)
-        0x19, 0x01, // USAGE_MINIMUM (number 1)
-        0x29, 0x06, // USAGE_MAXIMUM (number 6)
-        0x15, 0x00, // USAGE_MINIMUM (value 0)
-        0x25, 0x01, // USAGE_MAXIMUM (value 1)
-        0x95, 0x06, // REPORT_COUNT (6) - count 6
-        0x75, 0x01, // REPORT_SIZE (1) - 1 bit
-        0x81, 0x42, // INPUT (Data, Var, Abs)
-
-        0x95, 0x02, // REPORT_COUNT (2) - 填充8bit
-        0x81, 0x43, // INPUT (Cnst, Var, Abs, Null)
-        0xC0,
-};
-#endif
-
-/*!< USBD HID REPORT Descriptor - GamePad */
 const unsigned char usbd_hid_report_gamepad_descriptor[HID_REPORT_GAMEPAD_DESC_SIZE] = {
         0x05, 0x01, // USAGE_PAGE (Generic Desktop)
         0x09, 0x04, // USAGE (Joystick)
@@ -463,6 +427,49 @@ const unsigned char usbd_hid_report_gamepad_descriptor[HID_REPORT_GAMEPAD_DESC_S
         0x81, 0x42, // INPUT (Data, Var, Abs)
 
         0x95, 0x06, // REPORT_COUNT (6) - 填充8bit
+        0x81, 0x43, // INPUT (Cnst, Var, Abs, Null)
+        0xC0,
+};
+#endif
+
+/*!< USBD HID REPORT Descriptor - GamePad */
+const unsigned char usbd_hid_report_gamepad_descriptor[HID_REPORT_GAMEPAD_DESC_SIZE] = {
+        0x05, 0x01, // USAGE_PAGE (Generic Desktop)
+        0x09, 0x04, // USAGE (Joystick)
+        0xA1, 0x01, // COLLECTION (Application)
+
+        0x09, 0x01, // USAGE (Pointer)
+        0xA1, 0x00, // COLLECTION (Physical)
+        0x09, 0x30, // USAGE (X)
+        0x09, 0x31, // USAGE (Y)
+        0x15, 0x81, // LOGICAL_MINIMUM (-127)
+        0x25, 0x7F, // LOGICAL_MAXIMUM (127)
+        0x95, 0x02, // REPORT_COUNT (2) - count 2
+        0x75, 0x08, // REPORT_SIZE (8) - 8 bit
+        0x81, 0x02, // INPUT (Data, Var, Abs)
+        0xC0,
+
+        0x09, 0x01, // USAGE (Pointer)
+        0xA1, 0x00, // COLLECTION (Physical)
+        0x09, 0x32, // USAGE (Z)
+        0x09, 0x35, // USAGE (RZ)
+        0x15, 0x81, // LOGICAL_MINIMUM (-127)
+        0x25, 0x7F, // LOGICAL_MAXIMUM (127)
+        0x95, 0x02, // REPORT_COUNT (2) - count 2
+        0x75, 0x08, // REPORT_SIZE (8) - 8 bit
+        0x81, 0x02, // INPUT (Data, Var, Abs)
+        0xC0,
+
+        0x05, 0x09, // USAGE_PAGE (Button)
+        0x19, 0x01, // USAGE_MINIMUM (number 1)
+        0x29, 0x0A, // USAGE_MAXIMUM (number 10)
+        0x15, 0x00, // LOGICAL_MINIMUM (value 0)
+        0x25, 0x01, // LOGICAL_MAXIMUM (value 1)
+        0x95, 0x0A, // REPORT_COUNT (10) - count 10
+        0x75, 0x01, // REPORT_SIZE (1) - 1 bit
+        0x81, 0x42, // INPUT (Data, Var, Abs)
+
+        0x95, 0x06, // REPORT_COUNT (6) - 填充6bit
         0x81, 0x43, // INPUT (Cnst, Var, Abs, Null)
         0xC0,
 };
@@ -681,7 +688,7 @@ tmosEvents USB_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 
     if ( events & USB_SEND_JOY_REPORT_EVENT )
     {
-        usbd_ep_start_write(USBD_IF0_AL0_EP0_ADDR, joy_hid_buffer, 4);
+        usbd_ep_start_write(USBD_IF0_AL0_EP0_ADDR, joy_hid_buffer, 6);
 //        hid_state = HID_STATE_BUSY;
 //        while (hid_state != HID_STATE_IDLE);
         return events ^ USB_SEND_JOY_REPORT_EVENT;

@@ -59,8 +59,8 @@ void HAL_key_callback( uint16_t keys )
         }
         return;
     }
-    joy_hid_buffer[2] = keys & 0xFF;
-    joy_hid_buffer[3] = (keys >> 8) & 0x3;
+    joy_hid_buffer[4] = keys & 0xFF;
+    joy_hid_buffer[5] = (keys >> 8) & 0x3;
     tmos_start_task(halTaskID, SEND_REPORT_EVENT, MS1_TO_SYSTEM_TIME(2));
 }
 
