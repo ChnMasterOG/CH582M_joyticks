@@ -139,13 +139,13 @@
 #define WS2812_THREAD_PREIOD        60
 #endif
 #ifndef SWITCH_THREAD_PREIOD
-#define SWITCH_THREAD_PREIOD        10
+#define SWITCH_THREAD_PREIOD        5
 #endif
 #ifndef ICM_THREAD_PREIOD
 #define ICM_THREAD_PREIOD           10
 #endif
 #ifndef KEY_THREAD_PREIOD
-#define KEY_THREAD_PREIOD           20
+#define KEY_THREAD_PREIOD           5
 #endif
 
 #ifdef HAL_OLED

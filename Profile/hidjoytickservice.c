@@ -110,7 +110,8 @@ static const uint8_t hidReportMap[] = {
     0xC0,
 };
 #else
-extern const unsigned char  usbd_hid_report_gamepad_descriptor[46]; // HID_REPORT_GAMEPAD_DESC_SIZE
+#include "USB.h"
+extern const unsigned char  usbd_hid_report_gamepad_descriptor[HID_REPORT_GAMEPAD_DESC_SIZE];
 #define hidReportMap        usbd_hid_report_gamepad_descriptor
 #endif
 

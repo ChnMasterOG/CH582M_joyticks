@@ -14,7 +14,7 @@ HAL/USB.o: ../HAL/USB.c \
  E:\Project\CH582M_joyticks\CherryUSB\class\msc/usb_msc.h \
  E:\Project\CH582M_joyticks\CherryUSB\class\cdc/usbd_cdc.h \
  E:\Project\CH582M_joyticks\CherryUSB\class\cdc/usb_cdc.h \
- E:\Project\CH582M_joyticks\HAL\include/HAL.h \
+ E:\Project\CH582M_joyticks\HAL\include/USB.h \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH58x_common.h \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH583SFR.h \
  E:\Project\CH582M_joyticks\RVMSIS/core_riscv.h \
@@ -34,6 +34,7 @@ HAL/USB.o: ../HAL/USB.c \
  E:\Project\CH582M_joyticks\StdPeriphDriver\inc/ISP583.h \
  E:\Project\CH582M_joyticks\HAL\include/config.h \
  E:\Project\CH582M_joyticks\LIB/CH58xBLE_LIB.H \
+ E:\Project\CH582M_joyticks\HAL\include/HAL.h \
  E:\Project\CH582M_joyticks\APP/tp78_joyticks_via.h \
  E:\Project\CH582M_joyticks\HAL\include/RTC.h \
  E:\Project\CH582M_joyticks\HAL\include/SLEEP.h \
@@ -80,7 +81,7 @@ E:\Project\CH582M_joyticks\CherryUSB\class\cdc/usbd_cdc.h:
 
 E:\Project\CH582M_joyticks\CherryUSB\class\cdc/usb_cdc.h:
 
-E:\Project\CH582M_joyticks\HAL\include/HAL.h:
+E:\Project\CH582M_joyticks\HAL\include/USB.h:
 
 E:\Project\CH582M_joyticks\StdPeriphDriver\inc/CH58x_common.h:
 
@@ -119,6 +120,8 @@ E:\Project\CH582M_joyticks\StdPeriphDriver\inc/ISP583.h:
 E:\Project\CH582M_joyticks\HAL\include/config.h:
 
 E:\Project\CH582M_joyticks\LIB/CH58xBLE_LIB.H:
+
+E:\Project\CH582M_joyticks\HAL\include/HAL.h:
 
 E:\Project\CH582M_joyticks\APP/tp78_joyticks_via.h:
 

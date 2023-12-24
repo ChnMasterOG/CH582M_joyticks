@@ -41,6 +41,9 @@ static halKeyCBack_t pHalKeyProcessFunction;	    /* callback function */
  **************************************************************************************************/
 void HAL_key_callback( uint16_t keys )
 {
+    uint8_t i, dif;
+    component_settings_t *p;
+
     if ((keys & HAL_KEY_SW_ML) && (keys & HAL_KEY_SW_MR)) {
         reset_counter++;
     } else if (reset_counter != 0) {
@@ -59,8 +62,38 @@ void HAL_key_callback( uint16_t keys )
         }
         return;
     }
-    joy_hid_buffer[4] = keys & 0xFF;
-    joy_hid_buffer[5] = (keys >> 8) & 0x3;
+    if ((keys & via_config.select_layer_key) && (keys & ~via_config.select_layer_key) == 0) {
+        button_use_layer2 = !button_use_layer2;
+        return;
+    }
+
+    if (button_use_layer2)
+        p = &via_config.button_settings_L2[0];
+    else
+        p = &via_config.button_settings[0];
+    for (i = 0; i < 10; i++, p++) {
+        if (p->mapping_settings != MAP_TO_NONE) {
+            if (p->mapping_settings <= MAP_TO_D_PAD_4) {    // judge D-pad
+                dif = p->mapping_settings - MAP_TO_D_PAD_1;
+                if (keys & 1)
+                    joy_hid_buffer[8] = dif * 4;
+            } else {
+                dif = p->mapping_settings - MAP_TO_BUTTON_SW_1;
+                if (keys & 1) {
+                    if (dif < 8)
+                        joy_hid_buffer[6] |= (1 << dif);
+                    else
+                        joy_hid_buffer[7] |= (1 << (dif - 8));
+                } else {
+                    if (dif < 8)
+                        joy_hid_buffer[6] &= ~(1 << dif);
+                    else
+                        joy_hid_buffer[7] &= ~(1 << (dif - 8));
+                }
+            }
+        }
+        keys >>= 1;
+    }
     tmos_start_task(halTaskID, SEND_REPORT_EVENT, MS1_TO_SYSTEM_TIME(2));
 }
 

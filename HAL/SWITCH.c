@@ -14,6 +14,8 @@ switch_data_t switch_data[4];
 uint32_t adc_calibration_cnt = 0;
 uint32_t adc_calibration_val[4] = { 0 };
 
+static uint8_t switch_hid_buffer[4];
+
 /*******************************************************************************
  * Function Name  : SWITCH_data_deinit
  * Description    : SWITCH摇杆参数默认值
@@ -114,7 +116,7 @@ void SWITCH_ADC_ENABLE( uint8_t index, uint8_t mode )
 {
     uint16_t adc_data;
     uint8_t chn;
-    uint8_t region;
+    uint8_t i, region;
 
     switch (index) {
         case 0:
@@ -137,22 +139,31 @@ void SWITCH_ADC_ENABLE( uint8_t index, uint8_t mode )
     adc_data = ADC_ExcutSingleConver();
     if (mode == 0) {
         if (adc_data >= switch_data[index].adc_deadzone_l && adc_data <= switch_data[index].adc_deadzone_h) {
-            joy_hid_buffer[index] = 0;
+            switch_hid_buffer[index] = 0;
         } else {
-            joy_hid_buffer[index] = (int)POINT_RANGE * (adc_data - switch_data[index].adc_min_val) /
+            if (adc_data > switch_data[index].adc_max_val)
+                adc_data = switch_data[index].adc_max_val;
+            else if (adc_data < switch_data[index].adc_min_val)
+                adc_data = switch_data[index].adc_min_val;
+            switch_hid_buffer[index] = (int)POINT_RANGE * (adc_data - switch_data[index].adc_min_val) /
                                     (switch_data[index].adc_max_val - switch_data[index].adc_min_val) + POINT_MIN;
         }
         if (index == 3) {
-            if (via_config.sw_axis_mirror_flag) {
-                uint8_t tmp;
-                tmp = joy_hid_buffer[1];
-                joy_hid_buffer[1] = joy_hid_buffer[0];
-                joy_hid_buffer[0] = joy_hid_buffer[1];
+            if (button_use_layer2) {
+                for (i = 0; i < 4; i++) {
+                    if (via_config.sw_settings_L2[i].mirror_settings == TRUE)
+                        switch_hid_buffer[i] = -switch_hid_buffer[i];
+                    if (via_config.sw_settings_L2[i].mapping_settings != MAP_TO_NONE)
+                        joy_hid_buffer[via_config.sw_settings_L2[i].mapping_settings - MAP_TO_X_AXIS] = switch_hid_buffer[i];
+                }
+            } else {
+                for (i = 0; i < 4; i++) {
+                    if (via_config.sw_settings[i].mirror_settings == TRUE)
+                        switch_hid_buffer[i] = -switch_hid_buffer[i];
+                    if (via_config.sw_settings[i].mapping_settings != MAP_TO_NONE)
+                        joy_hid_buffer[via_config.sw_settings[i].mapping_settings - MAP_TO_X_AXIS] = switch_hid_buffer[i];
+                }
             }
-            if (via_config.sw_x_mirror_flag)
-                joy_hid_buffer[0] = -joy_hid_buffer[0];
-            if (via_config.sw_y_mirror_flag)
-                joy_hid_buffer[1] = -joy_hid_buffer[1];
             if (gyro_enable == FALSE)
                 tmos_start_task(halTaskID, SEND_REPORT_EVENT, MS1_TO_SYSTEM_TIME(2));
         }

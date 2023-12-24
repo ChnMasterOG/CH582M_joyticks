@@ -12,6 +12,7 @@
     #define __USB_H
 
     #include "CH58x_common.h"
+    #include "config.h"
 
     #define DevEP0SIZE      0x40
     #define NumsLockLED     0x01
@@ -39,6 +40,8 @@
     #define USB_ERR_LENGTH              0x01
     #define USB_DAT_INVALID             0x02
     #define USB_ERR_UNKNOWN             0x10
+
+    #define HID_REPORT_GAMEPAD_DESC_SIZE (107)
 
     extern tmosTaskID usbTaskID;
 

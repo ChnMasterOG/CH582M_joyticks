@@ -13,6 +13,7 @@
 #include "usbd_hid.h"
 #include "usbd_msc.h"
 #include "usbd_cdc.h"
+#include "USB.h"
 
 #ifndef WBVAL
 #define WBVAL(x) (unsigned char)((x) & 0xFF), (unsigned char)(((x) >> 8) & 0xFF)
@@ -63,7 +64,6 @@
 #define HID_REPORT_MOUSE_DESC_SIZE 74
 #define HID_REPORT_VOL_DESC_SIZE 33
 #define HID_REPORT_RAW_DESC_SIZE 34
-#define HID_REPORT_GAMEPAD_DESC_SIZE 65//46
 
 const unsigned char usbd_descriptor[] = {
 /********************************************** Device Descriptor */
@@ -435,7 +435,7 @@ const unsigned char usbd_hid_report_gamepad_descriptor[HID_REPORT_GAMEPAD_DESC_S
 /*!< USBD HID REPORT Descriptor - GamePad */
 const unsigned char usbd_hid_report_gamepad_descriptor[HID_REPORT_GAMEPAD_DESC_SIZE] = {
         0x05, 0x01, // USAGE_PAGE (Generic Desktop)
-        0x09, 0x04, // USAGE (Joystick)
+        0x09, 0x05, // USAGE (Game Pad)
         0xA1, 0x01, // COLLECTION (Application)
 
         0x09, 0x01, // USAGE (Pointer)
@@ -460,17 +460,49 @@ const unsigned char usbd_hid_report_gamepad_descriptor[HID_REPORT_GAMEPAD_DESC_S
         0x81, 0x02, // INPUT (Data, Var, Abs)
         0xC0,
 
+        0x09, 0x01, // USAGE (Pointer)
+        0xA1, 0x00, // COLLECTION (Physical)
+        0x09, 0x33, // USAGE (RX)
+        0x09, 0x34, // USAGE (RY)
+        0x15, 0x81, // LOGICAL_MINIMUM (-127)
+        0x25, 0x7F, // LOGICAL_MAXIMUM (127)
+        0x95, 0x02, // REPORT_COUNT (2) - count 2
+        0x75, 0x08, // REPORT_SIZE (8) - 8 bit
+        0x81, 0x02, // INPUT (Data, Var, Abs)
+        0xC0,
+
+//        0x06, 0x00, 0xFF, // USAGE (FF00h)
+//        0x09, 0x22, // USAGE (22h)
+//        0x15, 0x00, // LOGICAL_MINIMUM (0)
+//        0x25, 0xFF, // LOGICAL_MINIMUM (255)
+//        0x75, 0x08, // REPORT_SIZE (8) - 8 bit
+//        0x95, 0x1F, // REPORT_COUNT (31) - count 31
+//        0x91, 0x02, // OUTPUT (Data, Var, Abs)
+
         0x05, 0x09, // USAGE_PAGE (Button)
         0x19, 0x01, // USAGE_MINIMUM (number 1)
-        0x29, 0x0A, // USAGE_MAXIMUM (number 10)
+        0x29, 0x10, // USAGE_MAXIMUM (number 16)
         0x15, 0x00, // LOGICAL_MINIMUM (value 0)
         0x25, 0x01, // LOGICAL_MAXIMUM (value 1)
-        0x95, 0x0A, // REPORT_COUNT (10) - count 10
+        0x95, 0x10, // REPORT_COUNT (16) - count 16
         0x75, 0x01, // REPORT_SIZE (1) - 1 bit
         0x81, 0x42, // INPUT (Data, Var, Abs)
 
-        0x95, 0x06, // REPORT_COUNT (6) - 填充6bit
-        0x81, 0x43, // INPUT (Cnst, Var, Abs, Null)
+        0x05, 0x01, // USAGE_PAGE (Generic Desktop)
+        0x09, 0x39, // USAGE (Hat switch)
+        0x15, 0x00, // LOGICAL_MINIMUM (0)
+        0x25, 0x0F, // LOGICAL_MAXIMUM (15)
+        0x35, 0x00, // PHYSICAL_MINIMUM (0)
+        0x46, 0x0E, 0x01,   // PHYSICAL_MAXIMUM (270)
+        0x65, 0x14, // UNIT (Eng Rot:Angular Pos)
+        0x75, 0x04, // REPORT_SIZE (4)
+        0x95, 0x01, // REPORT_COUNT (1)
+        0x81, 0x42, // INPUT (Data,Var,Abs)
+
+        0x75, 0x04, // REPORT_SIZE (4)
+        0x95, 0x01, // REPORT_COUNT (1)
+        0x81, 0x03, // INPUT (Cnst, Var, Abs)
+
         0xC0,
 };
 
@@ -523,6 +555,7 @@ static void usbd_cdc_acm_bulk_in_callback(uint8_t ep, uint32_t nbytes)
 
 static void usbd_cdc_acm_bulk_out_callback(uint8_t ep, uint32_t nbytes)
 {
+#if 0
     uint8_t send_buf[6] = {0};
     /* for debug */
     if (cdc_buffer[0] == 'a') {
@@ -544,6 +577,7 @@ static void usbd_cdc_acm_bulk_out_callback(uint8_t ep, uint32_t nbytes)
             usbd_ep_start_write(USBD_IF0_AL0_EP0_ADDR, send_buf, sizeof(send_buf));
         }
     }
+#endif
     usbd_ep_start_read(USBD_IF3_AL0_EP1_ADDR, cdc_buffer, 0x40);
 }
 
@@ -688,7 +722,7 @@ tmosEvents USB_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 
     if ( events & USB_SEND_JOY_REPORT_EVENT )
     {
-        usbd_ep_start_write(USBD_IF0_AL0_EP0_ADDR, joy_hid_buffer, 6);
+        usbd_ep_start_write(USBD_IF0_AL0_EP0_ADDR, joy_hid_buffer, sizeof(joy_hid_buffer));
 //        hid_state = HID_STATE_BUSY;
 //        while (hid_state != HID_STATE_IDLE);
         return events ^ USB_SEND_JOY_REPORT_EVENT;

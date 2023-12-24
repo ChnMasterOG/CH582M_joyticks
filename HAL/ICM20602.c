@@ -257,28 +257,27 @@ float ICM20602_angle_diff(float angle1, float angle2, float max_angle)
 
 void ICM20602_report(void)
 {
-    uint8_t *buffer0, *buffer1;
+    uint8_t buffer0, buffer1;
     float pitch_ratio, roll_ratio;
 
-    if (via_config.gyro_axis_mirror_flag) {
-        buffer0 = &joy_hid_buffer[0];
-        buffer1 = &joy_hid_buffer[1];
-    } else {
-        buffer0 = &joy_hid_buffer[1];
-        buffer1 = &joy_hid_buffer[0];
-    }
     pitch_ratio = ICM20602_angle_diff(eulerAngle.pitch, lock_pitch, 90.0) / 90.0 * via_config.pitch_sensitivity;
     roll_ratio = ICM20602_angle_diff(eulerAngle.roll, lock_roll, 90.0) / 90.0 * via_config.roll_sensitivity;
     if (pitch_ratio > 1.0) pitch_ratio = 1.0;
     else if (pitch_ratio < -1.0) pitch_ratio = -1.0;
     if (roll_ratio > 1.0) roll_ratio = 1.0;
     else if (roll_ratio < -1.0) roll_ratio = -1.0;
-    *buffer0 = (char)(POINT_MAX * pitch_ratio);
-    *buffer1 = (char)(POINT_MAX * roll_ratio);
-    if (via_config.gyro_x_mirror_flag)
-        *buffer0 = -*buffer0;
-    if (via_config.gyro_y_mirror_flag)
-        *buffer1 = -*buffer1;
+    buffer0 = (char)(POINT_MAX * pitch_ratio);
+    buffer1 = (char)(POINT_MAX * roll_ratio);
+
+    if (via_config.gyro_x_settings.mirror_settings == TRUE)
+        buffer0 = -buffer0;
+    if (via_config.gyro_y_settings.mirror_settings == TRUE)
+        buffer1 = -buffer1;
+    if (via_config.gyro_x_settings.mapping_settings != MAP_TO_NONE)
+        joy_hid_buffer[via_config.gyro_x_settings.mapping_settings - MAP_TO_X_AXIS] = buffer0;
+    if (via_config.gyro_y_settings.mapping_settings != MAP_TO_NONE)
+        joy_hid_buffer[via_config.gyro_y_settings.mapping_settings - MAP_TO_X_AXIS] = buffer1;
+
     tmos_set_event(usbTaskID, USB_SEND_JOY_REPORT_EVENT);
     tmos_set_event(hidEmuTaskId, BLE_SEND_JOY_REPORT_EVENT);
 }

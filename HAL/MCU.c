@@ -12,9 +12,10 @@
 #include "HAL.h"
 
 tmosTaskID halTaskID = INVALID_TASK_ID;
-__attribute__((aligned(4))) uint8_t joy_hid_buffer[6] = { 0 };  // L_X_data, L_Y_data, R_X_data, R_Y_data, button_L, button_H
+__attribute__((aligned(4))) uint8_t joy_hid_buffer[9] = { 0 };  // X_data, Y_data, Z_data, RZ_data, RX_data, RY_data, D_pad  button_L, button_H
 uint8_t switch_calibration = FALSE;
 uint8_t gyro_enable = FALSE;
+uint8_t button_use_layer2 = FALSE;
 
 /*******************************************************************************
  * @fn          Lib_Calibration_LSI
@@ -185,8 +186,9 @@ void CH58X_BLEInit(void)
 tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 {
     uint8_t *msgPtr;
-    uint8_t i;
+    uint8_t i, flag;
     static uint32_t cal_time = 0;
+    static uint8_t last_joy_hid_buffer[sizeof(joy_hid_buffer)];
 
     if (events & SYS_EVENT_MSG)
     { // 处理HAL层消息，调用tmos_msg_receive读取消息，处理完成后删除消息。
@@ -213,8 +215,17 @@ tmosEvents HAL_ProcessEvent( tmosTaskID task_id, tmosEvents events )
 
     if (events & SEND_REPORT_EVENT)
     {
-        tmos_set_event(usbTaskID, USB_SEND_JOY_REPORT_EVENT);
-        tmos_set_event(hidEmuTaskId, BLE_SEND_JOY_REPORT_EVENT);
+        flag = 0;
+        for (i = 0; i < sizeof(joy_hid_buffer); i++) {
+            if (last_joy_hid_buffer[i] != joy_hid_buffer[i]) {
+                last_joy_hid_buffer[i] = joy_hid_buffer[i];
+                flag = 1;
+            }
+        }
+        if (flag == 1) {
+            tmos_set_event(usbTaskID, USB_SEND_JOY_REPORT_EVENT);
+            tmos_set_event(hidEmuTaskId, BLE_SEND_JOY_REPORT_EVENT);
+        }
         return events ^ SEND_REPORT_EVENT;
     }
 

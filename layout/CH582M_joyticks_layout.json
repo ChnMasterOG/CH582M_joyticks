@@ -90,17 +90,141 @@
                 "options": [0, 4095],
                 "content": ["id_adc_deadzone_l", 0, 16]
               }, {
-                "label": "x_mirror",
+                "label": "l_x_mirror",
                 "type": "toggle",
-                "content": ["id_sw_x_mirror_flag", 0, 17]
+                "content": ["id_sw_l_x_mirror", 0, 17]
               }, {
-                "label": "y_mirror",
+                "label": "l_x_mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["X axis", 1],
+                  ["Y axis", 2],
+                  ["Z axis", 3],
+                  ["RX axis", 5],
+                  ["RY axis", 6],
+                  ["RZ axis", 4]
+                ],
+                "content": ["id_sw_l_x_mapping", 0, 18]
+              },  {
+                "label": "l_y_mirror",
                 "type": "toggle",
-                "content": ["id_sw_y_mirror_flag", 0, 18]
+                "content": ["id_sw_l_y_mirror", 0, 19]
               }, {
-                "label": "axis_mirror",
+                "label": "l_y_mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["X axis", 1],
+                  ["Y axis", 2],
+                  ["Z axis", 3],
+                  ["RX axis", 5],
+                  ["RY axis", 6],
+                  ["RZ axis", 4]
+                ],
+                "content": ["id_sw_l_y_mapping", 0, 20]
+              }, {
+                "label": "r_x_mirror",
                 "type": "toggle",
-                "content": ["id_sw_axis_mirror_flag", 0, 19]
+                "content": ["id_sw_r_x_mirror", 0, 21]
+              }, {
+                "label": "r_x_mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["X axis", 1],
+                  ["Y axis", 2],
+                  ["Z axis", 3],
+                  ["RX axis", 5],
+                  ["RY axis", 6],
+                  ["RZ axis", 4]
+                ],
+                "content": ["id_sw_r_x_mapping", 0, 22]
+              },  {
+                "label": "r_y_mirror",
+                "type": "toggle",
+                "content": ["id_sw_r_y_mirror", 0, 23]
+              }, {
+                "label": "r_y_mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["X axis", 1],
+                  ["Y axis", 2],
+                  ["Z axis", 3],
+                  ["RX axis", 5],
+                  ["RY axis", 6],
+                  ["RZ axis", 4]
+                ],
+                "content": ["id_sw_r_y_mapping", 0, 24]
+              }, {
+                "label": "Layer2 l_x_mirror",
+                "type": "toggle",
+                "content": ["id_sw_l2_l_x_mirror", 0, 25]
+              }, {
+                "label": "Layer2 l_x_mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["X axis", 1],
+                  ["Y axis", 2],
+                  ["Z axis", 3],
+                  ["RX axis", 5],
+                  ["RY axis", 6],
+                  ["RZ axis", 4]
+                ],
+                "content": ["id_sw_l2_l_x_mapping", 0, 26]
+              },  {
+                "label": "Layer2 l_y_mirror",
+                "type": "toggle",
+                "content": ["id_sw_l2_l_y_mirror", 0, 27]
+              }, {
+                "label": "Layer2 l_y_mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["X axis", 1],
+                  ["Y axis", 2],
+                  ["Z axis", 3],
+                  ["RX axis", 5],
+                  ["RY axis", 6],
+                  ["RZ axis", 4]
+                ],
+                "content": ["id_sw_l2_l_y_mapping", 0, 28]
+              }, {
+                "label": "Layer2 r_x_mirror",
+                "type": "toggle",
+                "content": ["id_sw_l2_r_x_mirror", 0, 29]
+              }, {
+                "label": "Layer2 r_x_mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["X axis", 1],
+                  ["Y axis", 2],
+                  ["Z axis", 3],
+                  ["RX axis", 5],
+                  ["RY axis", 6],
+                  ["RZ axis", 4]
+                ],
+                "content": ["id_sw_l2_r_x_mapping", 0, 30]
+              },  {
+                "label": "Layer2 r_y_mirror",
+                "type": "toggle",
+                "content": ["id_sw_l2_r_y_mirror", 0, 31]
+              }, {
+                "label": "Layer2 r_y_mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["X axis", 1],
+                  ["Y axis", 2],
+                  ["Z axis", 3],
+                  ["RX axis", 5],
+                  ["RY axis", 6],
+                  ["RZ axis", 4]
+                ],
+                "content": ["id_sw_l2_r_y_mapping", 0, 32]
               }
             ]
           }, {
@@ -131,25 +255,13 @@
                 "type": "toggle",
                 "content": ["id_gyro_key_enable", 1, 5]
               }, {
-                "label": "x_mirror",
-                "type": "toggle",
-                "content": ["id_gyro_x_mirror_flag", 1, 6]
-              }, {
-                "label": "y_mirror",
-                "type": "toggle",
-                "content": ["id_gyro_y_mirror_flag", 1, 7]
-              }, {
-                "label": "axis_mirror",
-                "type": "toggle",
-                "content": ["id_gyro_axis_mirror_flag", 1, 8]
-              }, {
                 "label": "trigger_key",
                 "type": "dropdown",
                 "options": [
-                  ["LEFT 1", 0],
-                  ["LEFT 2", 1],
-                  ["RIGHT 1", 2],
-                  ["RIGHT 2", 3],
+                  ["KEY LEFT 1", 0],
+                  ["KEY LEFT 2", 1],
+                  ["KEY RIGHT 1", 2],
+                  ["KEY RIGHT 2", 3],
                   ["KEY BL", 4],
                   ["KEY BR", 5],
                   ["KEY ZL", 6],
@@ -157,7 +269,602 @@
                   ["KEY ML", 8],
                   ["KEY MR", 9]
                 ],
-                "content": ["gyro_trigger_key", 1, 9]
+                "content": ["id_gyro_trigger_key", 1, 6]
+              }, {
+                "label": "x_mirror",
+                "type": "toggle",
+                "content": ["id_gyro_x_mirror", 1, 7]
+              }, {
+                "label": "x_mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["X axis", 1],
+                  ["Y axis", 2],
+                  ["Z axis", 3],
+                  ["RX axis", 5],
+                  ["RY axis", 6],
+                  ["RZ axis", 4]
+                ],
+                "content": ["id_gyro_x_mapping", 1, 8]
+              },  {
+                "label": "y_mirror",
+                "type": "toggle",
+                "content": ["id_gyro_y_mirror", 1, 9]
+              }, {
+                "label": "y_mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["X axis", 1],
+                  ["Y axis", 2],
+                  ["Z axis", 3],
+                  ["RX axis", 5],
+                  ["RY axis", 6],
+                  ["RZ axis", 4]
+                ],
+                "content": ["id_gyro_y_mapping", 1, 10]
+              }
+            ]
+          }, {
+            "label": "Button Configs",
+            "content": [
+              {
+                "label": "select_layer_key",
+                "type": "dropdown",
+                "options": [
+                  ["KEY LEFT 1", 0],
+                  ["KEY LEFT 2", 1],
+                  ["KEY RIGHT 1", 2],
+                  ["KEY RIGHT 2", 3],
+                  ["KEY BL", 4],
+                  ["KEY BR", 5],
+                  ["KEY ZL", 6],
+                  ["KEY ZR", 7],
+                  ["KEY ML", 8],
+                  ["KEY MR", 9]
+                ],
+                "content": ["id_select_layer_key", 2, 1]
+              }, {
+                "label": "Layer1 key1 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l1_button1_mapping", 2, 3]
+              }, {
+                "label": "Layer1 key2 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l1_button2_mapping", 2, 5]
+              }, {
+                "label": "Layer1 key3 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l1_button3_mapping", 2, 7]
+              }, {
+                "label": "Layer1 key4 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l1_button3_mapping", 2, 9]
+              }, {
+                "label": "Layer1 key5 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l1_button5_mapping", 2, 11]
+              }, {
+                "label": "Layer1 key6 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l1_button6_mapping", 2, 13]
+              }, {
+                "label": "Layer1 key7 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l1_button7_mapping", 2, 15]
+              }, {
+                "label": "Layer1 key8 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l1_button8_mapping", 2, 17]
+              }, {
+                "label": "Layer1 key9 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l1_button9_mapping", 2, 19]
+              }, {
+                "label": "Layer1 key10 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l1_button10_mapping", 2, 21]
+              }, {
+                "label": "Layer2 key1 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l2_button1_mapping", 2, 23]
+              }, {
+                "label": "Layer2 key2 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l2_button2_mapping", 2, 25]
+              }, {
+                "label": "Layer2 key3 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l2_button3_mapping", 2, 27]
+              }, {
+                "label": "Layer2 key4 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l2_button4_mapping", 2, 29]
+              }, {
+                "label": "Layer2 key5 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l2_button5_mapping", 2, 31]
+              }, {
+                "label": "Layer2 key6 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l2_button6_mapping", 2, 33]
+              }, {
+                "label": "Layer2 key7 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l2_button7_mapping", 2, 35]
+              }, {
+                "label": "Layer2 key8 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l2_button8_mapping", 2, 37]
+              }, {
+                "label": "Layer2 key9 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l2_button9_mapping", 2, 39]
+              }, {
+                "label": "Layer2 key10 mapping",
+                "type": "dropdown",
+                "options": [
+                  ["None", 0],
+                  ["D-PAD 1", 7],
+                  ["D-PAD 2", 8],
+                  ["D-PAD 3", 9],
+                  ["D-PAD 4", 10],
+                  ["KEY LEFT 1", 11],
+                  ["KEY LEFT 2", 12],
+                  ["KEY RIGHT 1", 13],
+                  ["KEY RIGHT 2", 14],
+                  ["KEY BL", 15],
+                  ["KEY BR", 16],
+                  ["KEY ZL", 17],
+                  ["KEY ZR", 18],
+                  ["KEY ML", 19],
+                  ["KEY MR", 20],
+                  ["KEY EX1", 21],
+                  ["KEY EX2", 22],
+                  ["KEY EX3", 23],
+                  ["KEY EX4", 24],
+                  ["KEY EX5", 25],
+                  ["KEY EX6", 26]
+                ],
+                "content": ["id_l2_button10_mapping", 2, 41]
               }
             ]
           }

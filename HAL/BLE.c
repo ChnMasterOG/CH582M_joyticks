@@ -157,7 +157,7 @@ static uint8_t hidEmuRptCB(uint8_t id, uint8_t type, uint16_t uuid,
                            uint8_t oper, uint16_t *pLen, uint8_t *pData);
 static void    hidEmuEvtCB(uint8_t evt);
 static void    hidEmuStateCB(gapRole_States_t newState, gapRoleEvent_t *pEvent);
-static void    hidEmuSendJotickReport(uint8_t X_data, uint8_t Y_data, uint16_t buttons);
+static void    hidEmuSendJotickReport(uint8_t *buf, uint8_t len);
 
 /*********************************************************************
  * PROFILE CALLBACKS
@@ -295,7 +295,7 @@ uint16_t HidEmu_ProcessEvent(uint8_t task_id, uint16_t events)
 
     if(events & BLE_SEND_JOY_REPORT_EVENT)
     {
-        hidEmuSendJotickReport(joy_hid_buffer[0], joy_hid_buffer[1], (uint16_t)joy_hid_buffer[2] | ((uint16_t)joy_hid_buffer[3] << 8));
+        hidEmuSendJotickReport(joy_hid_buffer, sizeof(joy_hid_buffer));
         return (events ^ BLE_SEND_JOY_REPORT_EVENT);
     }
     return 0;
@@ -324,23 +324,15 @@ static void hidEmu_ProcessTMOSMsg(tmos_event_hdr_t *pMsg)
  *
  * @brief   Build and send a HID joytick report.
  *
- * @param   L_data - L axis move data
- *          R_data - R axis move data
- *          buttons - 10 bit buttons
+ * @param   buf - hid buffer
+ *          len - length of buffer
  *
  * @return  none
  */
-static void hidEmuSendJotickReport(uint8_t X_data, uint8_t Y_data, uint16_t buttons)
+static void hidEmuSendJotickReport(uint8_t *buf, uint8_t len)
 {
-    uint8_t buf[3];
-
-    buf[0] = X_data;
-    buf[1] = Y_data;
-    buf[2] = buttons & 0xFF;
-    buf[3] = (buttons >> 8) & 0x3;
-
     HidDev_Report(HID_RPT_ID_JOYTICK_IN, HID_REPORT_TYPE_INPUT,
-                  4, buf);
+                  len, buf);
 }
 
 /*********************************************************************

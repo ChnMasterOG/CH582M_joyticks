@@ -27,6 +27,7 @@ extern "C"
 #define HAL_KEY_POLLING_VALUE   	   100
 
 /* Switches (keys) */
+#define HAL_KEY_NONE    0x0
 #define HAL_KEY_SW_1    0x01    // key left 1
 #define HAL_KEY_SW_2    0x02    // key left 2
 #define HAL_KEY_SW_3    0x04    // key right 1
