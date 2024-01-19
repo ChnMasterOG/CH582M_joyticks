@@ -344,6 +344,10 @@ void HAL_Init()
             switch_calibration = SWITCH_CAL_STEP1_START;
     }
 
+    /* 初始灯光 */
+    if (via_config.backlight_enable == TRUE)
+        WS2812_Change_Style_to(button_use_layer2 ? WS2812_Style_Cyan_Breath : WS2812_Style_Purple_Breath);
+
 if (switch_calibration == FALSE) {
     tmos_start_task(halTaskID, ICM_EVENT, MS1_TO_SYSTEM_TIME(1000));
     tmos_start_task(halTaskID, WS2812_EVENT, MS1_TO_SYSTEM_TIME(1000));

@@ -24,6 +24,7 @@ encoding//HAL/include/SWITCH.h=GBK
 encoding//HAL/include/config.h=UTF-8
 encoding//LIB/CH58xBLE_LIB.h=GBK
 encoding//Ld/Link.ld=GBK
+encoding//Profile/battservice.c=GBK
 encoding//Profile/hiddev.c=UTF-8
 encoding//Profile/hidjoytickservice.c=GBK
 encoding//Startup/startup_CH583.S=GBK

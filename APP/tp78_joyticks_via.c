@@ -42,6 +42,7 @@ __attribute__((aligned(EEPROM_BLOCK_SIZE))) flash_data_t via_config = {
         .button_settings_L2[1] = { .mapping_settings = MAP_TO_D_PAD_2 },
         .button_settings_L2[2] = { .mapping_settings = MAP_TO_D_PAD_3 },
         .button_settings_L2[3] = { .mapping_settings = MAP_TO_D_PAD_4 },
+        .backlight_enable = TRUE,
 };
 
 /*******************************************************************************
@@ -87,6 +88,7 @@ void via_set_default_config(void)
     via_config.button_settings_L2[1].mapping_settings = MAP_TO_D_PAD_2;
     via_config.button_settings_L2[2].mapping_settings = MAP_TO_D_PAD_3;
     via_config.button_settings_L2[3].mapping_settings = MAP_TO_D_PAD_4;
+    via_config.backlight_enable = TRUE;
 }
 
 /*******************************************************************************
@@ -306,6 +308,25 @@ static void via_custom_value_command(uint8_t *data, uint8_t len)
         }
       }
       break;
+    }
+    case 3: { // backlight configs
+      switch (*command_value) {
+        case id_backlight_enable: {
+          if (*command_id == VIA_ID_CUSTOM_SET_VALUE) {
+              via_config.backlight_enable = data[3];
+              if (via_config.backlight_enable == FALSE)
+                  WS2812_Change_Style_to(WS2812_Style_Off);
+              else
+                  WS2812_Change_Style_to(button_use_layer2 ? WS2812_Style_Cyan_Breath : WS2812_Style_Purple_Breath);
+          } else {
+              data[3] = via_config.backlight_enable;
+          }
+          break;
+        }
+        default: {
+            break;
+        }
+      }
     }
     default: {
       break;

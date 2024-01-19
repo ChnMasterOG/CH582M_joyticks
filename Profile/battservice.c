@@ -26,8 +26,8 @@
  */
 
 // ADC voltage levels
-#define BATT_ADC_LEVEL_3V            409
-#define BATT_ADC_LEVEL_2V            273
+#define BATT_ADC_LEVEL_3_4V             3706
+#define BATT_ADC_LEVEL_4_2V             3998
 
 #define BATT_LEVEL_VALUE_IDX         2    // Position of battery level in attribute array
 #define BATT_LEVEL_VALUE_CCCD_IDX    3    // Position of battery level CCCD in attribute array
@@ -72,8 +72,8 @@ static battServiceTeardownCB_t battServiceTeardownCB = NULL;
 // Measurement calculation callback
 static battServiceCalcCB_t battServiceCalcCB = NULL;
 
-static uint16_t battMinLevel = BATT_ADC_LEVEL_2V; // For VDD/3 measurements
-static uint16_t battMaxLevel = BATT_ADC_LEVEL_3V; // For VDD/3 measurements
+static uint16_t battMinLevel = BATT_ADC_LEVEL_3_4V;
+static uint16_t battMaxLevel = BATT_ADC_LEVEL_4_2V;
 
 // Critical battery level setting
 static uint8_t battCriticalLevel;
@@ -505,7 +505,8 @@ static uint8_t battMeasure(void)
     }
 
     // Configure ADC and perform a read
-    adc = 300;
+    extern uint32_t BAT_adcVal;
+    adc = BAT_adcVal;
     // Call measurement teardown callback
     if(battServiceTeardownCB != NULL)
     {

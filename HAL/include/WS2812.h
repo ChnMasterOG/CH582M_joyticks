@@ -49,8 +49,9 @@
   void WS2812_Style_Off( void );
   void WS2812_Style_Normal( void );
   void WS2812_Style_Breath( void );
+  void WS2812_Style_Cyan_Breath( void );
+  void WS2812_Style_Purple_Breath( void );
   void WS2812_Style_Waterful( void );
-  void WS2812_Style_Touch( void );
   void WS2812_Style_Rainbow( void );
   void WS2812_Style_Custom( void );
   void WS2812_Style_Warning( void );

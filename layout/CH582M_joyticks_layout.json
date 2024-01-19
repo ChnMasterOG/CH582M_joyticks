@@ -867,6 +867,15 @@
                 "content": ["id_l2_button10_mapping", 2, 41]
               }
             ]
+          }, {
+            "label": "Backlight Configs",
+            "content": [
+              {
+                "label": "Enable",
+                "type": "toggle",
+                "content": ["id_backlight_enable", 3, 1]
+              }
+            ]
           }
         ]
       }

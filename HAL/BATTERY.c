@@ -78,18 +78,6 @@ void BATTERY_ADC_Calculation( void )
   BAT_adcVal = BAT_adcVal_tmp;
 }
 
-/*******************************************************************************
- * Function Name  : BATTERY_ADC_GetLevel
- * Description    : 获取电池ADC等级
- * Input          : ADC值
- * Return         : 电量等级
- *******************************************************************************/
-static UINT8 BATTERY_ADC_GetLevel( UINT32 adc_val )
-{
-
-}
-
-
 __INTERRUPT
 __HIGH_CODE
 void ADC_IRQHandler(void) //adc中断服务程序

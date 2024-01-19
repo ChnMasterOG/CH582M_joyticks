@@ -96,6 +96,8 @@
 #define id_first_button_x_mirror_L2 22
 #define id_last_button_y_mapping_L2 41
 
+#define id_backlight_enable         1
+
 typedef enum {
     VIA_ID_GET_PROTOCOL_VERSION = 0x01, // always 0x01
     VIA_ID_GET_KEYBOARD_VALUE = 0x02,
@@ -205,6 +207,7 @@ typedef struct {
     uint16_t select_layer_key;
     component_settings_t button_settings[10];
     component_settings_t button_settings_L2[10];
+    uint16_t backlight_enable;
 }flash_data_t;
 
 extern flash_data_t via_config;

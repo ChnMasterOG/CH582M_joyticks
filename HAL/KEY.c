@@ -59,11 +59,18 @@ void HAL_key_callback( uint16_t keys )
         if (gyro_enable) {
             lock_pitch = eulerAngle.pitch;
             lock_roll = eulerAngle.roll;
+            if (via_config.backlight_enable == TRUE)
+                WS2812_Change_Style_to(WS2812_Style_Rainbow);
+        } else {
+            if (via_config.backlight_enable == TRUE)
+                WS2812_Change_Style_to(button_use_layer2 ? WS2812_Style_Cyan_Breath : WS2812_Style_Purple_Breath);
         }
         return;
     }
     if ((keys & via_config.select_layer_key) && (keys & ~via_config.select_layer_key) == 0) {
         button_use_layer2 = !button_use_layer2;
+        if (via_config.backlight_enable == TRUE)
+            WS2812_Change_Style_to(button_use_layer2 ? WS2812_Style_Cyan_Breath : WS2812_Style_Purple_Breath);
         return;
     }
 
