@@ -8,7 +8,7 @@
 
 项目工程文件：tp78_joyticks.wvproj
 
-## **编译**
+## **介绍**
 
 视频介绍：[https://www.bilibili.com/video/BV13e411n7Vx/](https://www.bilibili.com/video/BV13e411n7Vx/)
 
