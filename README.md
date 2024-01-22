@@ -8,6 +8,10 @@
 
 项目工程文件：tp78_joyticks.wvproj
 
+## **编译**
+
+视频介绍：[https://www.bilibili.com/video/BV13e411n7Vx/](https://www.bilibili.com/video/BV13e411n7Vx/)
+
 ### **via使用**
 
 via在线工具网址：[VIA | VIA (caniusevia.com)](https://www.caniusevia.com/)
